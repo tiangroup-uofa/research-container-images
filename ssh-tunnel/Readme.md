@@ -79,6 +79,7 @@ Use `docker-cli`
 
 ```
 docker run -d \
+  --cap-add NET_ADMIN `#Need NET_ADMIN privilege for networking`\
   --name=ssh-tunnel-vpn0 \
   -p 3333:2222 `#3333 is the ssh tunnel port on your localhost`\
   -v /path/to/host_key_files:/config/ssh_host_keys `#if you want to fix ssh-keys`\
