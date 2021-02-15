@@ -122,6 +122,9 @@ Then the actual ssh tunneling stuff:
 ssh -o ProxyCommand="ssh -W %h:%p -p <proxy-port> -i <private-key> ssh-user@localhost" <ssh-options> <username>@<protected-server>
 ```
 - For `<proxy-port>`  and `<private-key>` please see the previous step of running container
+- `ssh-user` is the default user in the container. If you have the
+  same username on localhost, remember to specify via `-e
+  USER_NAME=<new_username>` when starting the container.
 
 If everything's fine now you should have access to the protected
 server

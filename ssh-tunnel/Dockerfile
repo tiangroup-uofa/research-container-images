@@ -1,7 +1,7 @@
 FROM linuxserver/openssh-server
 
 # Add openconnect vpn
-ENV  USER_NAME=user
+ENV  USER_NAME=ssh-user
 
 RUN apk add --update \
 	openconnect &&\
