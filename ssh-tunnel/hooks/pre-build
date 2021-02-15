@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Use docker buildx feature
+# docker run --rm --privileged multiarch/qemu-user-static:register --reset
+docker buildx create --use
