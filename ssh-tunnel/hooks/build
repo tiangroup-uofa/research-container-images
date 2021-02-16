@@ -1,6 +1,6 @@
 #!/bin/bash
 export DOCKER_CLI_EXPERIMENTAL=enabled
-env
+whoami
 docker --version
 docker buildx create --use
 # env
