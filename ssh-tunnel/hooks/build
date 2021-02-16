@@ -1,6 +1,7 @@
 #!/bin/bash
 export DOCKER_CLI_EXPERIMENTAL=enabled
-whoami
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
 docker --version
 docker buildx create --use
 # env
