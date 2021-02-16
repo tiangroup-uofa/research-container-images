@@ -1,4 +1,5 @@
 #!/bin/bash
+export DOCKER_CLI_EXPERIMENTAL=enabled
 env
 docker --version
 docker buildx create --use
