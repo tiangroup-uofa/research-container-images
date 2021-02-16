@@ -1,5 +1,6 @@
 #!/bin/bash
-
+env
+docker --version
 docker buildx create --use
 # env
 docker buildx build --push \
