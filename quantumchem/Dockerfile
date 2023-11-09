@@ -103,9 +103,9 @@ RUN if [[ $(uname -m) -eq "x86_64" ]]; then \
     fi
 
 WORKDIR $HOME
-# RUN git clone https://github.com/Open-Catalyst-Project/ocp.git && pip install --no-deps -e ocp
-# RUN git clone https://github.com/ulissigroup/finetuna.git && pip install --no-deps -e finetuna
-# RUN pip install --no-deps git+https://github.com/ulissigroup/vasp-interactive.git
+RUN git clone https://github.com/Open-Catalyst-Project/ocp.git && pip install --no-deps -e ocp
+RUN git clone https://github.com/ulissigroup/finetuna.git && pip install --no-deps -e finetuna
+RUN pip install --no-deps git+https://github.com/ulissigroup/vasp-interactive.git
 RUN mamba init bash
 ENV PATH=$CONDA_DIR/bin:$PATH
 USER $NB_UID
