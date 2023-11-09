@@ -91,7 +91,7 @@ RUN $CONDA_DIR/bin/mamba install -yq \
     fireworks jsonpickle sqlalchemy spglib scikit-learn \
     cerberus scikit-image matplotlib-base black pytest \
     pre-commit tensorboard tqdm wandb lmdb python-lmdb submitit pympler \
-    isort ase gpaw gpaw-data xtb xtb-python sparc-x sparc-x-api psutil \
+    isort ase gpaw gpaw-data xtb xtb-python sparc-x sparc-x-api psutil &&\
     mamba clean --all -f -y && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
