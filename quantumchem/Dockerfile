@@ -99,8 +99,7 @@ RUN $CONDA_DIR/bin/mamba install -yq \
 # x86_64 specific
 RUN if [[ $(uname -m) -eq "x86_64" ]]; then \
     $CONDA_DIR/bin/mamba install -yq \
-    pyg pytorch cudatoolkit pymatgen
-    fi
+    pyg pytorch cudatoolkit pymatgen; fi
 
 WORKDIR $HOME
 RUN git clone https://github.com/Open-Catalyst-Project/ocp.git && pip install --no-deps -e ocp
