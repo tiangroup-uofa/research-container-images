@@ -9,6 +9,7 @@ on:
 
 env:
   # The environmental variables should be manually updated (?)
+  JUPYTER_COMMIT_HASH: "00a67281613254de8a253a292313eb7187c83982"
   NVHPC_VERSION: "23.9"
   CUDA_VERSION: "12.2.2"
   MAJOR_CUDA_VERSION: "12.2"
@@ -51,7 +52,10 @@ jobs:
           OWNER: "${{ github.repository_owner }}"
       - name: Download jupyter docker stack
         run: |
-          git clone --depth 1 https://github.com/jupyter/docker-stacks.git@00a67281613254de8a253a292313eb7187c83982
+          git clone --depth 1 https://github.com/jupyter/docker-stacks.git
+          cd docker-stacks
+          git fetch ${JUPYTER_COMMIT_HASH}
+          git checkout ${JUPYTER_COMMIT_HASH}
       - name: Build with cuda base image
         uses: docker/build-push-action@v5
         with:
