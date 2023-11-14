@@ -48,6 +48,7 @@ jobs:
             PYTHON_VERSION=3.10
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
       - name: Build base notebook image
         uses: docker/build-push-action@v5
         with:
@@ -59,3 +60,4 @@ jobs:
             BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:cuda
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
