@@ -54,8 +54,9 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/jupyter/docker-stacks.git
           cd docker-stacks
-          git fetch ${JUPYTER_COMMIT_HASH}
+          git fetch origin ${JUPYTER_COMMIT_HASH}
           git checkout ${JUPYTER_COMMIT_HASH}
+          cd ..
       - name: Build with cuda base image
         uses: docker/build-push-action@v5
         with:
