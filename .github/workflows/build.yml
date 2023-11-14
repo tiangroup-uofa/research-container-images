@@ -43,6 +43,8 @@ jobs:
           push: false
           tags: |
             ghcr.io/${{ env.REPO_OWNER_LC }}/base:cuda
+          build-args:
+            BASE_CONTAINER: nvidia/cuda:12.2.2-runtime-ubuntu20.04
           cache-from: type=gha
           cache-to: type=gha,mode=max
   build_main_image:
