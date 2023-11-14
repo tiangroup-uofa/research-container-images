@@ -1,4 +1,4 @@
-name: Build main image
+name: Build the base-notebook stack
 
 on:
   push:
@@ -7,19 +7,25 @@ on:
       - workflow
   workflow_dispatch:
 
+env:
+  # The environmental variables should be manually updated (?)
+  NVHPC_VERSION: "23.9"
+  CUDA_VERSION: "12.2.2"
+  MAJOR_CUDA_VERSION: "12.2"
+  UBUNTU_VERSION: "22.04"
+  BASE_PY_VERSION: "3.10"
+
 jobs:
   build_jupyter_base:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+        
     steps:
-      - name: Set lower case repository name
-        # Hint from https://github.community/t/github-actions-repository-name-must-be-lowercase/184924
-        run: |
-          echo "REPO_OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
-        env:
-          OWNER: "${{ github.repository_owner }}"
-      - name: Download jupyter docker stack
-        run: |
-          git clone --depth 1 https://github.com/jupyter/docker-stacks.git
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: setup docker context for buildx
@@ -36,6 +42,16 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set lower case repository name
+        # Hint from https://github.community/t/github-actions-repository-name-must-be-lowercase/184924
+        # If OWNER is MyHOST --> REPO_OWNER_LC=myhost
+        run: |
+          echo "REPO_OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
+        env:
+          OWNER: "${{ github.repository_owner }}"
+      - name: Download jupyter docker stack
+        run: |
+          git clone --depth 1 https://github.com/jupyter/docker-stacks.git@00a67281613254de8a253a292313eb7187c83982
       - name: Build with cuda base image
         uses: docker/build-push-action@v5
         with:
@@ -44,8 +60,8 @@ jobs:
           tags: |
              ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:cuda
           build-args: |
-            ROOT_CONTAINER=nvidia/cuda:12.2.2-runtime-ubuntu20.04
-            PYTHON_VERSION=3.10
+            ROOT_CONTAINER=nvidia/cuda:${CUDA_VERSION}-base-ubuntu20.04
+            PYTHON_VERSION=${BASE_PY_VERSION}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
