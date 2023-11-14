@@ -3,7 +3,7 @@ name: Build main image
 on:
   push:
     branches:
-      - main
+      - master
       - workflow
   workflow_dispatch:
 
