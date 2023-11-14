@@ -40,9 +40,9 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: docker-stacks/images/docker-stacks-foundation
-          push: false
+          push: true
           tags: |
-            docker-stacks-foundation:cuda
+             ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:cuda
           build-args: |
             ROOT_CONTAINER=nvidia/cuda:12.2.2-runtime-ubuntu20.04
             PYTHON_VERSION=3.10
@@ -52,10 +52,10 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: docker-stacks/images/base-notebook
-          push: false
+          push: true
           tags: |
             ghcr.io/${{ env.REPO_OWNER_LC }}/base-notebook:cuda
           build-args: |
-            BASE_CONTAINER=docker-stacks-foundation:cuda
+            BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:cuda
           cache-from: type=gha
           cache-to: type=gha,mode=max
