@@ -37,14 +37,26 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build with cuda base image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
+        with:
+          context: docker-stacks/images/docker-stacks-foundation
+          push: false
+          tags: |
+            ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:cuda
+          build-args: |
+            ROOT_CONTAINER=nvidia/cuda:12.2.2-runtime-ubuntu20.04
+            PYTHON_VERSION=3.10
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Build base notebook image
+        users: docker/build-push-action@v5
         with:
           context: docker-stacks/images/base-notebook
           push: false
           tags: |
-            ghcr.io/${{ env.REPO_OWNER_LC }}/base:cuda
+            ghcr.io/${{ env.REPO_OWNER_LC }}/base-notebook:cuda
           build-args: |
-            BASE_CONTAINER=nvidia/cuda:12.2.2-runtime-ubuntu20.04
+            BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER_LC }}/base-notebook:cuda
           cache-from: type=gha
           cache-to: type=gha,mode=max
   build_main_image:
