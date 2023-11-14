@@ -65,7 +65,7 @@ jobs:
           tags: |
              ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:cuda
           build-args: |
-            ROOT_CONTAINER=nvidia/cuda:${CUDA_VERSION}-base-ubuntu20.04
+            ROOT_CONTAINER=nvcr.io/nvidia/cuda:${{ env.CUDA_VERSION }}-base-ubuntu20.04
             PYTHON_VERSION=${BASE_PY_VERSION}
           cache-from: type=gha
           cache-to: type=gha,mode=max
