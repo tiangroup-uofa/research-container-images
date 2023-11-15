@@ -23,8 +23,8 @@ RUN git clone --depth 1 https://github.com/Open-Catalyst-Project/ocp.git &&\
     cd ocp && git fetch origin ${OCP_COMMIT_HASH} && git checkout ${OCP_COMMIT_HASH}
 
 
-RUN ARCH=$(uname -m) &&\
-    if [ "$ARCH" -eq "x86_64" ]; then\
+RUN ARCH=$(uname -m) && echo build on $ARCH &&\
+    if [[ "$ARCH" == "x86_64" ]]; then\
       mamba install --yes -c pyg -c pytorch -c nvidia -c conda-forge \
       pyg=2.1.0 pytorch=1.13 cudatoolkit numpy=1.26 scipy=1.11;\
       mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}";\
