@@ -26,7 +26,7 @@ RUN git clone --depth 1 https://github.com/Open-Catalyst-Project/ocp.git &&\
 RUN ARCH=$(uname -m) && echo build on $ARCH &&\
     if [[ "$ARCH" == "x86_64" ]]; then\
       mamba install --yes -c pyg -c pytorch -c nvidia -c conda-forge \
-      pyg=2.1.0 pytorch=1.13 cudatoolkit numpy=1.26 scipy=1.11;\
+      pyg=2.1.0 pytorch=1.13 cudatoolkit \
       mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}";\
     else\
       mamba install --yes -c pytorch -c nvidia -c conda-forge compilers pytorch=1.13 numpy=1.26 scipy=1.11;\
@@ -37,7 +37,7 @@ RUN ARCH=$(uname -m) && echo build on $ARCH &&\
     
 # pymatgen dependencies are installed
 RUN mamba install --yes -c conda-forge\
-    ase=3.22 black dask e3nn ipywidgets matplotlib numba orjson \
+    numpy=1.26 scipy=1.11 ase=3.22 black dask e3nn ipywidgets matplotlib numba orjson \
     pre-commit pyyaml tensorboard tqdm pytest \
     lmdb python-lmdb tqdm submitit syrupy wandb joblib \
     monty networkx palettable pandas plotly pybtex requests ruamel.yaml spglib sympy \
