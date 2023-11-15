@@ -43,7 +43,7 @@ jobs:
       - name: Import env file from jupyter-base-image
         uses: falti/dotenv-action@v1.0.4
         with:
-          path: jupyter-base-image/env
+          path: ./jupyter-base-image/env
       - name: Download jupyter docker stack
         run: |
           git clone --depth 1 https://github.com/jupyter/docker-stacks.git
