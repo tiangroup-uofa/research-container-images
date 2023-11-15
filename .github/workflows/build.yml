@@ -5,16 +5,7 @@ on:
     branches:
       - master
       - workflow
-  workflow_dispatch:
-
-env:
-  # The environmental variables should be manually updated (?)
-  JUPYTER_COMMIT_HASH: "00a67281613254de8a253a292313eb7187c83982"
-  NVHPC_VERSION: "23.9"
-  CUDA_VERSION: "12.2.2"
-  MAJOR_CUDA_VERSION: "12.2"
-  UBUNTU_VERSION: "22.04"
-  BASE_PY_VERSION: "3.10"
+  workflow_dispatch:  
 
 jobs:
   build_jupyter_base:
@@ -25,7 +16,6 @@ jobs:
         platform:
           - linux/amd64
           - linux/arm64
-        
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -50,12 +40,16 @@ jobs:
           echo "REPO_OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
         env:
           OWNER: "${{ github.repository_owner }}"
+      - name: Import env file from jupyter-base-image
+        uses: falti/dotenv-action@v1.0.4
+        with:
+          path: jupyter-base-image/env
       - name: Download jupyter docker stack
         run: |
           git clone --depth 1 https://github.com/jupyter/docker-stacks.git
           cd docker-stacks
-          git fetch origin ${JUPYTER_COMMIT_HASH}
-          git checkout ${JUPYTER_COMMIT_HASH}
+          git fetch origin ${{ env.JUPYTER_COMMIT_HASH }}
+          git checkout ${{ env.JUPYTER_COMMIT_HASH }}
           cd ..
       - name: Build with cuda base image
         uses: docker/build-push-action@v5
