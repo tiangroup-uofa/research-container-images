@@ -12,10 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -70,7 +66,7 @@ jobs:
             PYTHON_VERSION=${{ env.BASE_PY_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
       - name: Build base notebook image
         uses: docker/build-push-action@v5
         with:
@@ -82,4 +78,4 @@ jobs:
             BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:cuda
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
