@@ -35,7 +35,7 @@ RUN ARCH=$(uname -m) && echo build on $ARCH &&\
       mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}";\
     fi
     
-RUN mamba install --yes \
+RUN mamba install --yes -c conda-forge\
     ase>=3.22.1 black>=22.3.0 dask e3nn=0.4.4 ipywidgets matplotlib numba orjson \
     pre-commit=2.10.* pymatgen>=2023.5.10 pyyaml tensorboard tqdm pytest \
     lmdb python-lmdb tqdm submitit syrupy=3.0.6 wandb &&\
