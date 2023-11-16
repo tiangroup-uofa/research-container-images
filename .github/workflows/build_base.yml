@@ -10,8 +10,7 @@ on:
       - '.github/workflows/build_base.yml'
   workflow_dispatch:
 
-env:
-  REPO_OWNER: ${{ github.repository_owner }}
+
 
 jobs:
   jupyter-base-image:
@@ -35,6 +34,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: set lower case owner name
+        run: |
+          echo "REPO_OWNER=${OWNER,,}" >>${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
       - name: Inject env variables
         uses: falti/dotenv-action@v1.0.4
         with:
