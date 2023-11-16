@@ -56,10 +56,10 @@ jobs:
           context: docker-stacks/images/docker-stacks-foundation
           push: true
           tags: |
-             ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:latest
-             ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:cuda
-             ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:cuda-${{ steps.date.outpus.date }}
-             ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:cuda-${{ env.CUDA_VERSION }}-py${{ env.BASE_PY_VERSION }}
+             ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:latest
+             ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:cuda
+             ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:cuda-${{ steps.date.outpus.date }}
+             ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:cuda-${{ env.CUDA_VERSION }}-py${{ env.BASE_PY_VERSION }}
           build-args: |
             ROOT_CONTAINER=nvcr.io/nvidia/cuda:${{ env.CUDA_VERSION }}-base-ubuntu20.04
             PYTHON_VERSION=${{ env.BASE_PY_VERSION }}
@@ -74,9 +74,9 @@ jobs:
           context: docker-stacks/images/docker-stacks-foundation
           push: true
           tags: |
-             ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:nvhpc
-             ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:nvhpc-${{ steps.date.outpus.date }}
-             ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:nvhpc-${{ env.NVHPC_VERSION }}-cuda${{ env.MAJOR_CUDA_VERSION }}-py${{ env.BASE_PY_VERSION }}
+             ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:nvhpc
+             ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:nvhpc-${{ steps.date.outpus.date }}
+             ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:nvhpc-${{ env.NVHPC_VERSION }}-cuda${{ env.MAJOR_CUDA_VERSION }}-py${{ env.BASE_PY_VERSION }}
           build-args: |
             ROOT_CONTAINER=nvcr.io/nvidia/nvhpc:${{ env.NVHPC_VERSION }}-runtime-cuda${{ env.MAJOR_CUDA_VERSION }}-ubuntu20.04
             PYTHON_VERSION=${{ env.BASE_PY_VERSION }}
@@ -98,7 +98,7 @@ jobs:
           tags: |
             ghcr.io/${{ env.REPO_OWNER_LC }}/base-notebook:cuda
           build-args: |
-            BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:cuda
+            BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:cuda
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
@@ -110,9 +110,9 @@ jobs:
           context: docker-stacks/images/base-notebook
           push: true
           tags: |
-            ghcr.io/${{ env.REPO_OWNER_LC }}/base-notebook:nvhpc
+            ghcr.io/${{ env.REPO_OWNER }}/base-notebook:nvhpc
           build-args: |
-            BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER_LC }}/docker-stacks-foundation:nvhpc
+            BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:nvhpc
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
