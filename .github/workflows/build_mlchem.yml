@@ -1,4 +1,4 @@
-name: Build the base-notebook stack
+name: Build the ML chem stack
 
 on:
   push:
