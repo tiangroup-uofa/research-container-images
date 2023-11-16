@@ -1,17 +1,24 @@
 # This is the partial dockerfile to install pytorch stack
 # Append this file after the main Docker file
 
+ARG PYTORCH_VERSION=1.13
+ARG PYG_VERSION=2.1
 
 RUN conda config --prepend channels nvidia &&\
     conda config --prepend channels pyg &&\
     conda config --prepend channels pytorch &&\
     conda config --set channel_priority strict &&\
+    # 1. Universal packages
+    mamba install -c conda-forge \
+    zip unzip rsync rclone git gh
     ARCH=$(uname -m) && echo build on $ARCH &&\
     if [[ "$ARCH" == "x86_64" ]]; then\
       mamba install --yes -c pytorch -c nvidia \
-      pyg=2.1 pytorch=1.13=*cuda11* &&\
+      pyg=${PYG_VERSION} pytorch=${PYTORCH_VERSION}=*cuda* &&\
       mamba install --yes -c conda-forge scipy=1.11 &&\
-      mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}";\
+      mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}" &&\
+    echo "pytorch =${PYTORCH_VERSION}=*cuda*" >> $CONDA_PREFIX/conda-meta/pinned &&\
+    echo "pyg ${PYG_VERSION}" >> $CONDA_PREFIX/conda-meta/pinned;\
     else\
       mamba install --yes -c pytorch -c nvidia pytorch=1.13 &&\
       mamba install --yes -c conda-forge compilers scipy=1.11 &&\
@@ -19,6 +26,8 @@ RUN conda config --prepend channels nvidia &&\
       mkdir -p pyg-wheels && tar xvf pyg-2.1.0-py310-linux_aarch64.tar.gz -C pyg-wheels --strip-components 1 &&\
       pip install --no-cache-dir torch_scatter torch_sparse torch_cluster torch_spline_conv --find-links pyg-wheels --no-index &&\
       rm -rf pyg-wheels pyg*.tar.gz &&\
+      echo "pytorch ${PYTORCH_VERSION}" >> $CONDA_PREFIX/conda-meta/pinned &&\
+      echo "pyg ${PYG_VERSION}" >> $CONDA_PREFIX/conda-meta/pinned;\
       mamba remove --yes compilers &&\
       mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}";\
     fi
