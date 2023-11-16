@@ -100,7 +100,7 @@ jobs:
           context: docker-stacks/images/base-notebook
           push: true
           tags: |
-            ghcr.io/${{ env.REPO_OWNER_LC }}/base-notebook:cuda
+            ghcr.io/${{ env.REPO_OWNER }}/base-notebook:cuda
           build-args: |
             BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:cuda
           cache-from: type=gha
