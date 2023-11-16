@@ -65,7 +65,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
-        if: matrix.variant == "cuda"
+        if: matrix.variant == 'cuda'
 
       - name: Build with foundation image -- nvhpc
         uses: docker/build-push-action@v5
@@ -82,7 +82,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
-        if: matrix.variant == "nvhpc"
+        if: matrix.variant == 'nvhpc'
         
 
       - name: Combine docker files
@@ -101,7 +101,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
-        if: matrix.variant == "cuda"
+        if: matrix.variant == 'cuda'
 
       - name: Build base notebook image -- nvhpc
         uses: docker/build-push-action@v5
@@ -115,4 +115,4 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
-        if: matrix.variant == "nvhpc"
+        if: matrix.variant == 'nvhpc'
