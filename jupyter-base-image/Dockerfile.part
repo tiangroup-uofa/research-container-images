@@ -17,8 +17,8 @@ RUN conda config --prepend channels nvidia &&\
       pyg=${PYG_VERSION} pytorch=${PYTORCH_VERSION}=*cuda* &&\
       mamba install --yes -c conda-forge scipy=1.11 &&\
       mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}" &&\
-    echo "pytorch =${PYTORCH_VERSION}=*cuda*" >> $CONDA_PREFIX/conda-meta/pinned &&\
-    echo "pyg ${PYG_VERSION}" >> $CONDA_PREFIX/conda-meta/pinned;\
+    echo "pytorch =${PYTORCH_VERSION}=*cuda*" >> "${CONDA_DIR}"/conda-meta/pinned &&\
+    echo "pyg ${PYG_VERSION}" >> "${CONDA_DIR}"/conda-meta/pinned;\
     else\
       mamba install --yes -c pytorch -c nvidia pytorch=1.13 &&\
       mamba install --yes -c conda-forge compilers scipy=1.11 &&\
@@ -26,8 +26,8 @@ RUN conda config --prepend channels nvidia &&\
       mkdir -p pyg-wheels && tar xvf pyg-2.1.0-py310-linux_aarch64.tar.gz -C pyg-wheels --strip-components 1 &&\
       pip install --no-cache-dir torch_scatter torch_sparse torch_cluster torch_spline_conv --find-links pyg-wheels --no-index &&\
       rm -rf pyg-wheels pyg*.tar.gz &&\
-      echo "pytorch ${PYTORCH_VERSION}" >> $CONDA_PREFIX/conda-meta/pinned &&\
-      echo "pyg ${PYG_VERSION}" >> $CONDA_PREFIX/conda-meta/pinned;\
+      echo "pytorch ${PYTORCH_VERSION}" >> "${CONDA_DIR}"/conda-meta/pinned &&\
+      echo "pyg ${PYG_VERSION}" >> "${CONDA_DIR}"/conda-meta/pinned;\
       mamba remove --yes compilers &&\
       mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}";\
     fi
