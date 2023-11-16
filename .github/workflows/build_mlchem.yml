@@ -13,7 +13,7 @@ on:
 
 
 jobs:
-  jupyter-base-image:
+  ml-chem:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
