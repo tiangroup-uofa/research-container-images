@@ -53,7 +53,8 @@ jobs:
           git checkout ${{ env.JUPYTER_COMMIT_HASH }}
       - name: Get Current Date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: |
+          echo "DATE=$(date +'%Y-%m-%d')" >>${GITHUB_ENV}
       - name: Build with foundation image -- cuda
         uses: docker/build-push-action@v5
         with:
@@ -62,7 +63,7 @@ jobs:
           tags: |
              ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:latest
              ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:cuda
-             ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:cuda-${{ steps.date.outpus.date }}
+             ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:cuda-${{ env.DATE }}
              ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:cuda-${{ env.CUDA_VERSION }}-py${{ env.BASE_PY_VERSION }}
           build-args: |
             ROOT_CONTAINER=nvcr.io/nvidia/cuda:${{ env.CUDA_VERSION }}-base-ubuntu20.04
@@ -79,7 +80,7 @@ jobs:
           push: true
           tags: |
              ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:nvhpc
-             ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:nvhpc-${{ steps.date.outpus.date }}
+             ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:nvhpc-${{ env.DATE }}
              ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:nvhpc-${{ env.NVHPC_VERSION }}-cuda${{ env.MAJOR_CUDA_VERSION }}-py${{ env.BASE_PY_VERSION }}
           build-args: |
             ROOT_CONTAINER=nvcr.io/nvidia/nvhpc:${{ env.NVHPC_VERSION }}-runtime-cuda${{ env.MAJOR_CUDA_VERSION }}-ubuntu20.04
