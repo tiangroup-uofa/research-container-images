@@ -10,7 +10,7 @@ RUN conda config --prepend channels nvidia &&\
     conda config --set channel_priority strict &&\
     # 1. Universal packages
     mamba install -c conda-forge \
-    zip unzip rsync rclone git gh nano &&\
+    zip unzip rsync rclone git gh nano&&\
     ARCH=$(uname -m) && echo build on $ARCH &&\
     if [[ "$ARCH" == "x86_64" ]]; then\
       mamba install --yes -c pytorch -c nvidia \

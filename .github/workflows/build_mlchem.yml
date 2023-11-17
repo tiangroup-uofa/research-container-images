@@ -50,6 +50,8 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ env.REPO_OWNER }}/mlchem:cuda
+            ghcr.io/${{ env.REPO_OWNER }}/mlchem:cuda-${{ env.DATE }}
+            ghcr.io/${{ env.REPO_OWNER }}/mlchem:latest
           build-args: |
             BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER }}/base-notebook:cuda
           cache-from: type=gha
@@ -64,6 +66,7 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ env.REPO_OWNER }}/mlchem:nvhpc
+            ghcr.io/${{ env.REPO_OWNER }}/mlchem:nvhpc-${{ env.DATE }}
           build-args: |
             BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER }}/base-notebook:nvhpc
           cache-from: type=gha
