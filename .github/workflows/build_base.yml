@@ -64,6 +64,10 @@ jobs:
         id: date
         run: |
           echo "DATE=$(date +'%Y-%m-%d')" >>${GITHUB_ENV}
+
+      - name: Check disk space
+        run: |
+          df -h
       - name: Build with foundation image -- cuda
         uses: docker/build-push-action@v5
         with:
@@ -98,6 +102,9 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
         if: matrix.variant == 'nvhpc'
+      - name: Check disk space
+        run: |
+          df -h
         
   base-notebook-image:
     needs: foundation-image
@@ -157,6 +164,9 @@ jobs:
           cp ./jupyter-base-image/* docker-stacks/images/base-notebook/
           cd docker-stacks/images/base-notebook/
           cat Dockerfile.part >> Dockerfile
+      - name: Check disk space
+        run: |
+          df -h
       - name: Build base notebook image -- cuda
         uses: docker/build-push-action@v5
         with:
@@ -183,3 +193,6 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
         if: matrix.variant == 'nvhpc'
+      - name: Check disk space
+        run: |
+          df -h
