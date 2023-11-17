@@ -6,6 +6,7 @@ ARG PYG_VERSION=2.1
 
 # Install additional common packages
 USER root
+COPY cpuquota /usr/local/bin
 RUN apt-get update &&\
     apt-get install -yq --no-install-recommends \
     git curl bzip2 zip unzip rsync rclone netcat nano \
@@ -18,6 +19,7 @@ RUN apt-get update &&\
     apt-get clean && rm -rf /var/lib/apt/lists/* &&\
     # Make jovyan sudoer 
     echo "$NB_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/sudo-${NB_USER} &&\
+    chmod a+x /usr/local/bin/cpuquota &&\
     fix-permissions "/home/${NB_USER}" && fix-permissions "/opt"
    
 USER ${NB_UID}

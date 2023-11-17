@@ -1,0 +1,47 @@
+#!/bin/bash
+# This is a shell script to obtain available CPU quota for the current linux system (native or container)
+
+# Function to calculate CPU cores based on cfs quota
+calculate_cores_cfs_quota() {
+    if ! [[ -f /sys/fs/cgroup/cpu/cpu.cfs_quota_us ]]; then return 1; fi
+    cpu_quota=$(cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us 2>/dev/null)
+    cpu_period=$(cat /sys/fs/cgroup/cpu/cpu.cfs_period_us 2>/dev/null)
+
+    if [ -n "$cpu_quota" ] && [ "$cpu_quota" != "-1" ] && [ -n "$cpu_period" ] && [ "$cpu_period" != "0" ]; then
+        echo $(echo "$cpu_quota $cpu_period" | awk '{print int($1/$2 + 0.5)}')
+    else
+        return 1
+    fi
+}
+
+# Function to get CPU cores using lscpu
+get_cores_lscpu() {
+    lscpu_output=$(lscpu 2>/dev/null)
+    if [ $? -eq 0 ]; then
+        echo "$lscpu_output" | awk '/^CPU\(s\):/ {print $2}'
+    else
+        return 1
+    fi
+}
+
+# Function to get CPU cores from /proc/cpuinfo
+get_cores_cpuinfo() {
+    cpu_cores=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
+    if [ $? -eq 0 ] && [ -n "$cpu_cores" ]; then
+        echo $cpu_cores
+    else
+        return 1
+    fi
+}
+
+# Try each method in order
+cpu_cores=$(calculate_cores_cfs_quota) || \
+cpu_cores=$(get_cores_lscpu) || \
+cpu_cores=$(get_cores_cpuinfo)
+
+# Check if we successfully obtained the CPU core count
+if [ -n "$cpu_cores" ]; then
+    echo "$cpu_cores"
+else
+    exit 1
+fi
