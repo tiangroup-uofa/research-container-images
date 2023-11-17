@@ -120,5 +120,11 @@ jobs:
             BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:nvhpc
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
         if: matrix.variant == 'nvhpc'
+
+      - name: Trigger rebuild of downstream workflows
+        run: |
+          gh workflow run build_mlchem.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
