@@ -196,3 +196,13 @@ jobs:
       - name: Check disk space
         run: |
           df -h
+  trigger-downstream:
+    needs: base-notebook-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rebuild downstream images
+        run: |
+          gh workflow run build_mlchem.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
