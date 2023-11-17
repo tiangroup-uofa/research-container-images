@@ -23,13 +23,10 @@ jobs:
           - nvhpc
     steps:
       - name: Maximize build space
-        uses: easimon/maximize-build-space@v8
-        with:
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
-          remove-android: 'true'
-          remove-haskell: 'true'
-          remove-codeql: 'true'
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          df -h
       - name: Checkout
         uses: actions/checkout@v2
       - name: Set up QEMU
