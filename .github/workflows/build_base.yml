@@ -94,7 +94,10 @@ jobs:
       - name: Combine docker files
         run: |
           curdir=$(pwd)
-          cat ./jupyter-base-image/Dockerfile.part >> docker-stacks/images/base-notebook/Dockerfile
+          cp ./jupyter-base-image/* docker-stacks/images/base-notebook/
+          cd docker-stacks/images/base-notebook/
+          cat Dockerfile.part >> Dockerfile
+          
       - name: Build base notebook image -- cuda
         uses: docker/build-push-action@v5
         with:
