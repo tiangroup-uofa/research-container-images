@@ -21,7 +21,6 @@ RUN mamba install --yes -c conda-forge\
     fireworks custodian tabulate uncertainties \
     # Quantum chem depedencies
     openbabel xtb xtb-python dftd3-python dftd4-python gpaw gpaw-data sparc-x sparc-x-api psutil openmm\
-    openssh \
     &&\
     ARCH=$(uname -m) && echo build on $ARCH &&\
     if [[ "$ARCH" == "x86_64" ]]; then\
