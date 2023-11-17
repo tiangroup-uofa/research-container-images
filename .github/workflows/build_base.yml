@@ -87,7 +87,7 @@ jobs:
             PYTHON_VERSION=${{ env.BASE_PY_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
         if: matrix.variant == 'nvhpc'
         
 
