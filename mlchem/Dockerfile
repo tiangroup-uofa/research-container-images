@@ -14,7 +14,7 @@ ARG OCP_COMMIT_HASH=7ad64195b0317f45a148d24b3243b667a4428c83
 # Several dependencies are lacking in the conda-forge aarch64 channel. Use pip
 # ambertools / packmol are currently only available in linux-64
 RUN mamba install --yes -c conda-forge\
-    "ase>=3.22" black dask e3nn ipywidgets matplotlib numba orjson \
+    "ase=3.22.1" black dask e3nn ipywidgets matplotlib numba orjson \
     pre-commit pyyaml tensorboard tqdm pytest \
     lmdb python-lmdb tqdm submitit syrupy wandb joblib loguru\
     monty networkx palettable pandas plotly pybtex requests ruamel.yaml spglib sympy \
