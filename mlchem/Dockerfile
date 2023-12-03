@@ -27,8 +27,11 @@ RUN mamba install --yes -c conda-forge\
       mamba install --yes -c conda-forge pymatgen rdkit datamol ambertools packmol &&\
       mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}";\
     else\
-      pip install --no-cache-dir pymatgen rdkit datamol;\
-      mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}";\
+      mamba install -c conda-forge compilers &&\
+      pip install --no-cache-dir pymatgen rdkit datamol &&\
+      mamba remove --yes compilers &&\
+      mamba clean --all -f -y &&\
+    fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}";\
     fi &&\
     git clone --depth 1 https://github.com/Open-Catalyst-Project/ocp.git &&\
     cd ocp && git fetch origin ${OCP_COMMIT_HASH} && git checkout ${OCP_COMMIT_HASH} && cd ../ &&\
