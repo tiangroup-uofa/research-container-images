@@ -28,7 +28,7 @@ RUN mamba install --yes -c conda-forge\
       mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}";\
     else\
       mamba install -c conda-forge compilers &&\
-      pip install --no-cache-dir pymatgen rdkit datamol &&\
+      pip install --no-cache-dir --no-deps pymatgen rdkit datamol &&\
       mamba remove --yes compilers &&\
       mamba clean --all -f -y &&\
     fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}";\
