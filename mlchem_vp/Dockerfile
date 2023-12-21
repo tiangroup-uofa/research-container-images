@@ -17,7 +17,8 @@ RUN HPCSDK_VERSION_DETECT=$(echo $HPCX_DIR | grep -oP 'Linux_x86_64/\K[0-9]+\.[0
 
 
 
-FROM nvcr.io/nvidia/nvhpc:${HPCSDK_VERSION}-devel-cuda_multi-ubuntu${UBUNTU_VERSION} as builder
+#FROM nvcr.io/nvidia/nvhpc:${HPCSDK_VERSION}-devel-cuda_multi-ubuntu${UBUNTU_VERSION} as builder
+FROM nvcr.io/nvidia/nvhpc:23.9-devel-cuda_multi-ubuntu20.04 as builder
 ARG DEBIAN_FRONTEND=noninteractive
 COPY --from=builder /opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras /opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras
 
