@@ -20,7 +20,7 @@ ARG BUILDER=nvcr.io/nvidia/nvhpc:${HPCSDK_VERSION}-devel-cuda_multi-ubuntu${UBUN
 #FROM  as builder
 # FROM nvcr.io/nvidia/nvhpc:23.9-devel-cuda_multi-ubuntu20.04 as builder
 # ARG DEBIAN_FRONTEND=noninteractive
-COPY --from=$BUILDER /opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras /opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras
+COPY --from=${BUILDER} /opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras /opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras
 
 ENV LD_LIBRARY_PATH="/opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras/qd/lib:/opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/comm_libs/${CUDA_LIB_VERSION}/nccl/lib:${LD_LIBRARY_PATH}"
 
