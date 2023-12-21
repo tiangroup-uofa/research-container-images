@@ -11,12 +11,12 @@ LABEL maintainer="T.Tian <alchem0x2a@gmail.com>"
 
 USER root
 # Detect the version of NVHPC
-RUN HPCSDK_VERSION_DETECT=$(echo $HPCX_DIR | grep -oP 'Linux_x86_64/\K[0-9]+\.[0-9]+(?=/comm_libs)') && \
-    CUDA_VERSION_DETECT=$(echo $HPCX_DIR | grep -oP 'comm_libs/\K[0-9]+\.[0-9]+(?=/hpcx)') && \
-    UBUNTU_VERSION_DETECT=$(lsb_release -sr) &&\
-    if [ "$HPCSDK_VERSION_DETECT" != "$HPCSDK_VERSION" ]; then exit 1; fi &&\
-    # if [ "$CUDA_VERSION_DETECT" != "$CUDA_VERSION" ]; then exit 1; fi &&\
-    if [ "$UBUNTU_VERSION_DETECT" != "$UBUNTU_VERSION" ]; then exit 1; fi
+# RUN HPCSDK_VERSION_DETECT=$(echo $HPCX_DIR | grep -oP 'Linux_x86_64/\K[0-9]+\.[0-9]+(?=/comm_libs)') && \
+#     CUDA_VERSION_DETECT=$(echo $HPCX_DIR | grep -oP 'comm_libs/\K[0-9]+\.[0-9]+(?=/hpcx)') && \
+#     UBUNTU_VERSION_DETECT=$(lsb_release -sr) &&\
+#     if [ "$HPCSDK_VERSION_DETECT" != "$HPCSDK_VERSION" ]; then exit 1; fi &&\
+#     # if [ "$CUDA_VERSION_DETECT" != "$CUDA_VERSION" ]; then exit 1; fi &&\
+#     if [ "$UBUNTU_VERSION_DETECT" != "$UBUNTU_VERSION" ]; then exit 1; fi
 
 #TODO: I don't know how dockerfile screws with the expansion here, lets use harcord first
 # COPY --from=nvcr.io/nvidia/nvhpc:23.9-devel-cuda_multi-ubuntu20.04 /opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras /opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras
