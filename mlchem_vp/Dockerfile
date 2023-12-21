@@ -18,6 +18,10 @@ USER root
 #     # if [ "$CUDA_VERSION_DETECT" != "$CUDA_VERSION" ]; then exit 1; fi &&\
 #     if [ "$UBUNTU_VERSION_DETECT" != "$UBUNTU_VERSION" ]; then exit 1; fi
 
+WORKDIR /tmp
+COPY nvhpc-qd-23.9.tgz ./
+RUN tar xvf nvhpc-qd-23.9.tgz -C / && rm -rf nvhpc*.tgz
+
 #TODO: I don't know how dockerfile screws with the expansion here, lets use harcord first
 # COPY --from=nvcr.io/nvidia/nvhpc:23.9-devel-cuda_multi-ubuntu20.04 /opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras /opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras
 
