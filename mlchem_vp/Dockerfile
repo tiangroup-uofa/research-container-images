@@ -4,6 +4,8 @@
 # FROM nvcr.io/nvidia/nvhpc:${HPCSDK_VERSION}-devel-cuda_multi-ubuntu${UBUNTU_VERSION} as builder
 
 ARG BASE_CONTAINER="ghcr.io/alchem0x2a/mlchem:nvhpc"
+ARG HPCSDK_VERSION=23.9
+ARG CUDA_VERSION=12.2
 FROM ${BASE_CONTAINER}
 
 LABEL maintainer="T.Tian <alchem0x2a@gmail.com>"
@@ -25,7 +27,7 @@ RUN tar xvf nvhpc-qd-23.9.tgz -C / && rm -rf nvhpc*.tgz
 #TODO: I don't know how dockerfile screws with the expansion here, lets use harcord first
 # COPY --from=nvcr.io/nvidia/nvhpc:23.9-devel-cuda_multi-ubuntu20.04 /opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras /opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras
 
-ENV LD_LIBRARY_PATH="/opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras/qd/lib:/opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/comm_libs/${CUDA_LIB_VERSION}/nccl/lib:${LD_LIBRARY_PATH}"
+ENV LD_LIBRARY_PATH="/opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/compilers/extras/qd/lib:/opt/nvidia/hpc_sdk/Linux_x86_64/${HPCSDK_VERSION}/comm_libs/${CUDA_VERSION}/nccl/lib:${LD_LIBRARY_PATH}"
 
 RUN apt-get update &&\
     apt-get install -yq --no-install-recommends intel-mkl-full libfftw3-3 &&\

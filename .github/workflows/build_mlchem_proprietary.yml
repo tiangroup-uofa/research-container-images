@@ -61,6 +61,7 @@ jobs:
           build-args: |
             BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER }}/mlchem:nvhpc
             HPCSDK_VERSION=23.9
+            CUDA_VERSION=12.2
             UBUNTU_VERSION=20.04
           cache-from: type=gha
           cache-to: type=gha,mode=max

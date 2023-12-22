@@ -78,3 +78,15 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
         if: matrix.variant == 'nvhpc'
+
+  trigger-downstream:
+    needs: ml-chem
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Rebuild downstream images
+        run: |
+          gh workflow run build_mlchem_proprietary.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
