@@ -4,9 +4,11 @@
 # FROM nvcr.io/nvidia/nvhpc:${HPCSDK_VERSION}-devel-cuda_multi-ubuntu${UBUNTU_VERSION} as builder
 
 ARG BASE_CONTAINER="ghcr.io/alchem0x2a/mlchem:nvhpc"
-ARG HPCSDK_VERSION=23.9
-ARG CUDA_VERSION=12.2
+
 FROM ${BASE_CONTAINER}
+
+ARG HPCSDK_VERSION=23.9
+ARG CUDA_VERSION=11.0
 
 LABEL maintainer="T.Tian <alchem0x2a@gmail.com>"
 
