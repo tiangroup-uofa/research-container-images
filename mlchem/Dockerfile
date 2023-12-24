@@ -37,4 +37,5 @@ RUN mamba install --yes -c conda-forge\
     cd ocp && git fetch origin ${OCP_COMMIT_HASH} && git checkout ${OCP_COMMIT_HASH} && cd ../ &&\
     pip install --no-deps -e ./ocp &&\
     git clone --depth 1 https://github.com/ulissigroup/finetuna.git && pip install --no-deps -e ./finetuna &&\
-    git clone --depth 1 https://github.com/ulissigroup/vasp-interactive.git && pip install --no-deps -e ./vasp-interactive
+    git clone --depth 1 https://github.com/ulissigroup/vasp-interactive.git && pip install --no-deps -e ./vasp-interactive &&\
+    pip install --no-cache-dir rclone-python
