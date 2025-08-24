@@ -1,12 +1,16 @@
 # Jupyter notebook commit hash
-JUPYTER_COMMIT_HASH='00a67281613254de8a253a292313eb7187c83982'
+#JUPYTER_COMMIT_HASH='00a67281613254de8a253a292313eb7187c83982'
+# Latest
+JUPYTER_COMMIT_HASH='45abbce05f12916d93c913a62c6c65da75203683'
 # This is the NVHPC image name, not the cuda version
-NVHPC_VERSION='23.9'
-CUDA_VERSION='11.0.3'
+NVHPC_VERSION='24.1'
+CUDA_VERSION='11.8.0'
 # This is the cuda version to be used for nvhpc images
-MAJOR_CUDA_VERSION='11.0'
+MAJOR_CUDA_VERSION='11.8'
 UBUNTU_VERSION='22.04'
-BASE_PY_VERSION='3.10'
+BASE_PY_VERSION='3.12'
 PYTORCH_VERSION='1.13'
-PYG_VERSION='2.1'
+#PYG_VERSION='2.1'
 
+# nvcr.io/nvidia/nvhpc:24.11-devel-cuda_multi-ubuntu24.04
+# nvcr.io/nvidia/nvhpc:24.11-runtime-cuda11.8-ubuntu24.04

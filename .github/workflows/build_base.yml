@@ -28,7 +28,7 @@ jobs:
           sudo docker image prune --all --force
           df -h
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: setup docker buildx
@@ -75,7 +75,7 @@ jobs:
              ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:cuda-${{ env.DATE }}
              ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:cuda-${{ env.CUDA_VERSION }}-py${{ env.BASE_PY_VERSION }}
           build-args: |
-            ROOT_CONTAINER=nvcr.io/nvidia/cuda:${{ env.CUDA_VERSION }}-base-ubuntu20.04
+            ROOT_CONTAINER=nvcr.io/nvidia/cuda:${{ env.CUDA_VERSION }}-base-ubuntu${{ env.UBUNTU_VERSION }}
             PYTHON_VERSION=${{ env.BASE_PY_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -92,7 +92,7 @@ jobs:
              ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:nvhpc-${{ env.DATE }}
              ghcr.io/${{ env.REPO_OWNER }}/docker-stacks-foundation:nvhpc-${{ env.NVHPC_VERSION }}-cuda${{ env.MAJOR_CUDA_VERSION }}-py${{ env.BASE_PY_VERSION }}
           build-args: |
-            ROOT_CONTAINER=nvcr.io/nvidia/nvhpc:${{ env.NVHPC_VERSION }}-runtime-cuda${{ env.MAJOR_CUDA_VERSION }}-ubuntu20.04
+            ROOT_CONTAINER=nvcr.io/nvidia/nvhpc:${{ env.NVHPC_VERSION }}-runtime-cuda${{ env.MAJOR_CUDA_VERSION }}-ubuntu${{ env.UBUNTU_VERSION }}
             PYTHON_VERSION=${{ env.BASE_PY_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -118,7 +118,7 @@ jobs:
           sudo docker image prune --all --force
           df -h
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: setup docker buildx
