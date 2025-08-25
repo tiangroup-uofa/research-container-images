@@ -16,7 +16,6 @@ RUN apt-get update &&\
     apt-get clean && rm -rf /var/lib/apt/lists/* &&\
     # Make jovyan sudoer 
     echo "$NB_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/sudo-${NB_USER} &&\
-    chmod a+x /usr/local/bin/cpuquota &&\
     fix-permissions "/home/${NB_USER}" && fix-permissions "/opt"
 
 # Remove very likely unused HPCX components
@@ -36,5 +35,6 @@ RUN mamba install \
 
 USER root
 COPY cpuquota /usr/local/bin
+RUN chmod a+x /usr/local/bin/cpuquota
 
 USER ${NB_UID}
