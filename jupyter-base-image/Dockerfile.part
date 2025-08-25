@@ -31,23 +31,24 @@ RUN conda config --prepend channels nvidia &&\
     ARCH=$(uname -m) && echo build on $ARCH &&\
     if [[ "$ARCH" == "x86_64" ]]; then\
     mamba install --yes -c pytorch -c nvidia \
-    pyg=${PYG_VERSION} pytorch=${PYTORCH_VERSION}=*cuda* &&\
-    mamba install --yes -c conda-forge "scipy=1.11" "numpy=1.23.5" &&\
+    #pyg=${PYG_VERSION}
+    pytorch=${PYTORCH_VERSION}=*cuda* &&\
+    mamba install --yes -c conda-forge "scipy>=1.11" "numpy>=2.0" &&\
     mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}" &&\
     echo "pytorch ${PYTORCH_VERSION}=*cuda*" >> "${CONDA_DIR}"/conda-meta/pinned &&\
-    echo "pyg ${PYG_VERSION}.*" >> "${CONDA_DIR}"/conda-meta/pinned &&\
+    #echo "pyg ${PYG_VERSION}.*" >> "${CONDA_DIR}"/conda-meta/pinned &&\
     echo "numpy 1.23.5" >> "${CONDA_DIR}"/conda-meta/pinned ;\
     else\
-    mamba install --yes -c pytorch -c nvidia pytorch=1.13 &&\
-    mamba install --yes -c conda-forge compilers "scipy=1.11" "numpy=1.23.5" "scikit-learn>=1.1" "threadpoolctl>=2.0.0" &&\
-    wget https://github.com/alchem0x2A/docker-images/releases/download/binary/pyg-2.1.0-py310-linux_aarch64.tar.gz &&\
-    mkdir -p pyg-wheels && tar xvf pyg-2.1.0-py310-linux_aarch64.tar.gz -C pyg-wheels --strip-components 1 &&\
-    pip install --no-cache-dir torch_geometric &&\
-    pip install --no-cache-dir torch_scatter torch_sparse torch_cluster torch_spline_conv --find-links pyg-wheels --no-index &&\
-    rm -rf pyg-wheels pyg*.tar.gz &&\
+    mamba install --yes -c pytorch -c nvidia "pytorch=${PYTORCH_VERSION}" &&\
+    mamba install --yes -c conda-forge compilers "scipy>=1.11" "numpy>=2.0" "scikit-learn>=1.1" "threadpoolctl>=2.0.0" &&\
+    #wget https://github.com/alchem0x2A/docker-images/releases/download/binary/pyg-2.1.0-py310-linux_aarch64.tar.gz &&\
+    #mkdir -p pyg-wheels && tar xvf pyg-2.1.0-py310-linux_aarch64.tar.gz -C pyg-wheels --strip-components 1 &&\
+    #pip install --no-cache-dir torch_geometric &&\
+    #pip install --no-cache-dir torch_scatter torch_sparse torch_cluster torch_spline_conv --find-links pyg-wheels --no-index &&\
+    #rm -rf pyg-wheels pyg*.tar.gz &&\
     echo "pytorch ${PYTORCH_VERSION}.*" >> "${CONDA_DIR}"/conda-meta/pinned &&\
-    echo "pyg ${PYG_VERSION}.*" >> "${CONDA_DIR}"/conda-meta/pinned &&\
-    echo "numpy 1.23.5" >> "${CONDA_DIR}"/conda-meta/pinned ;\
+    #echo "pyg ${PYG_VERSION}.*" >> "${CONDA_DIR}"/conda-meta/pinned &&\
+    #echo "numpy 1.23.5" >> "${CONDA_DIR}"/conda-meta/pinned ;\
     mamba remove --yes compilers &&\
     mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}";\
     fi
