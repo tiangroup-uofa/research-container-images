@@ -57,8 +57,7 @@ jobs:
           cd docker-stacks
           git fetch origin ${{ env.JUPYTER_COMMIT_HASH }}
           git checkout ${{ env.JUPYTER_COMMIT_HASH }}
-          # Copy all into docker 
-          cd docker-stacks/images/docker-stacks-foundation/
+          cd $curdir/docker-stacks/images/docker-stacks-foundation/
           cp $curdir/base/* ./
           cat Dockerfile.part >> Dockerfile
           
