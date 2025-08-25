@@ -1,0 +1,40 @@
+# This is the partial dockerfile to be appended at the end
+# of the base image
+
+# Most tools installed here should only be absolutely necessary
+# for day-to-day use. nano and tmux is probably an only exception
+USER root
+RUN apt-get update &&\
+    apt-get install -yq --no-install-recommends \
+    git curl bzip2 zip unzip rsync rclone nano \
+    openssh-client parallel tmux &&\
+    # Install gh
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg &&\
+    chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg &&\
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null &&\
+    apt-get update && apt-get install gh &&\
+    apt-get clean && rm -rf /var/lib/apt/lists/* &&\
+    # Make jovyan sudoer 
+    echo "$NB_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/sudo-${NB_USER} &&\
+    chmod a+x /usr/local/bin/cpuquota &&\
+    fix-permissions "/home/${NB_USER}" && fix-permissions "/opt"
+
+# Remove very likely unused HPCX components
+# RUN if [ -d /opt/nvidia/hpc_sdk ]; then \
+#       NVROOT=/opt/nvidia/hpc_sdk/Linux_x86_64/23.9/
+#       find /opt/nvidia/hpc_sdk -type d \( -name "hpcx-*" -o -name "debug" \) -prune -exec rm -rf {} + ; \
+#     fi
+
+
+
+USER ${NB_UID}
+RUN mamba install \
+    --yes -c conda-forge \
+    uv globus-compute-endpoint parsl &&\
+    mamba clean --all -f -y
+
+
+USER root
+COPY cpuquota /usr/local/bin
+
+USER ${NB_UID}

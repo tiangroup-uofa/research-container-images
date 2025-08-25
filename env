@@ -1,0 +1,17 @@
+# Jupyter notebook commit hash
+# Configurations for building stacks
+# The values are global to all downstream images
+# Jupyter stack of 2025.08 
+JUPYTER_COMMIT_HASH='45abbce05f12916d93c913a62c6c65da75203683'
+# This is the NVHPC image name, not the cuda version
+NVHPC_VERSION='24.1'
+CUDA_VERSION='11.8.0'
+# This is the cuda version to be used for nvhpc images
+MAJOR_CUDA_VERSION='11.8'
+UBUNTU_VERSION='22.04'
+BASE_PY_VERSION='3.12'
+#PYTORCH_VERSION='2.7'
+#PYG_VERSION='2.1'
+
+# nvcr.io/nvidia/nvhpc:24.11-devel-cuda_multi-ubuntu24.04
+# nvcr.io/nvidia/nvhpc:24.11-runtime-cuda11.8-ubuntu24.04
