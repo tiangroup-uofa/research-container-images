@@ -28,9 +28,11 @@ RUN apt-get update &&\
 
 USER ${NB_UID}
 RUN mamba install \
-    --yes -c conda-forge \
-    uv globus-compute-endpoint parsl &&\
-    mamba clean --all -f -y
+    --yes -c conda-forge uv &&\
+    uv pip install globus-compute-endpoint parsl &&\
+    mamba clean --all -f -y &&\
+    uv cache clean && rm -rf ${HOME}/.cache/uv
+
 
 
 USER root
