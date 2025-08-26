@@ -9,11 +9,6 @@ on:
       - 'base/**'
       - '.github/workflows/build_worker.yml'
   workflow_dispatch:
-  # Worker is a downstream workflow from foundation (mlchem_base)
-  workflow_run:
-    workflows: [Run Tests]
-    types:
-      - completed
 
 
 jobs:

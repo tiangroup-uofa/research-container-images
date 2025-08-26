@@ -6,6 +6,7 @@
 # - jupyterlab / ipykernel
 # - uv (faster pip install)
 # - nano / ssh / tmux if needed
+
 USER root
 RUN apt-get update &&\
     apt-get install -yq --no-install-recommends \
@@ -51,7 +52,6 @@ COPY start-notebook.py cpuquota /usr/local/bin/
 USER root
 RUN chmod a+x \
     /usr/local/bin/cpuquota /usr/local/bin/start-notebook.py &&\
-    fix-permissions /etc/jupyter/ &&\
     rm -rf "/home/${NB_USER}/.cache/"
 
 
