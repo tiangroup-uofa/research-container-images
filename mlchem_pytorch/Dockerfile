@@ -16,8 +16,8 @@ WORKDIR "$HOME"
 RUN UV_PYTHON=/opt/conda/bin/python \
     uv pip install --no-cache-dir \
     -extra-index-url=https://pypi.nvidia.com \
-    --index-url 'https://download.pytorch.org/whl/${CUDA_VERSION}' \
-    'torch==${PYTORCH_VERSION}' && \
+    --index-url "https://download.pytorch.org/whl/${CUDA_VERSION}" \
+    "torch==${PYTORCH_VERSION}" && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
