@@ -8,9 +8,10 @@ NVHPC_VERSION='24.1'
 CUDA_VERSION='11.8.0'
 # This is the cuda version to be used for nvhpc images
 MAJOR_CUDA_VERSION='11.8'
+# We use ubuntu 22.04 for backward compatibility
 UBUNTU_VERSION='22.04'
 BASE_PY_VERSION='3.12'
-#PYTORCH_VERSION='2.7'
+PYTORCH_VERSION='2.7'
 #PYG_VERSION='2.1'
 
 # nvcr.io/nvidia/nvhpc:24.11-devel-cuda_multi-ubuntu24.04

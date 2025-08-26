@@ -17,18 +17,6 @@ RUN apt-get update &&\
     # Make jovyan sudoer 
     echo "$NB_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/sudo-${NB_USER} &&\
     fix-permissions "/home/${NB_USER}"
-    # && fix-permissions "/opt/"
-
-# Remove very likely unused HPCX components
-# RUN if [ -d /opt/nvidia/hpc_sdk ]; then \
-#       NVROOT=/opt/nvidia/hpc_sdk/Linux_x86_64/23.9/
-#       find /opt/nvidia/hpc_sdk -type d \( -name "hpcx-*" -o -name "debug" \) -prune -exec rm -rf {} + ; \
-#     fi
-
-# /opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/extras/qd/lib/libqdmod.so.0
-# libcudaforwrapblas117.so
-# /opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/lib/libcudaforwrapblas117.so
-# libnvhpcwrapcufft.so => /opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/lib/libnvhpcwrapcufft.so
 
 USER ${NB_UID}
 RUN mamba install \
@@ -40,6 +28,7 @@ RUN mamba install \
 
 USER root
 COPY cpuquota /usr/local/bin
+#COPY init_env.sh /usr/local/bin
 RUN chmod a+x /usr/local/bin/cpuquota
 
 USER ${NB_UID}
