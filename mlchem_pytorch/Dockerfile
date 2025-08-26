@@ -33,7 +33,7 @@ RUN UV_PYTHON=/opt/conda/bin/python \
     uv pip install --no-cache-dir \
     -extra-index-url=https://pypi.nvidia.com \
     --index-url 'https://download.pytorch.org/whl/cu118' \
-    'torch=2.7' && \
+    'torch==2.7' && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
