@@ -1,4 +1,4 @@
-name: Build the base-notebook stack
+name: Build the mlchem_base image (without python packages)
 
 on:
   push:
@@ -11,16 +11,11 @@ on:
   workflow_dispatch:
 
 
-
 jobs:
   foundation-image:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        variant:
-          - oss
-          - nvhpc
     steps:
       - name: Maximize build space
         run: |
@@ -61,7 +56,6 @@ jobs:
           cp $curdir/base/* ./
           cat Dockerfile.part >> Dockerfile
           
-          
       - name: Get Current Date
         id: date
         run: |
@@ -77,35 +71,33 @@ jobs:
           push: true
           tags: |
              ghcr.io/${{ env.REPO_OWNER }}/mlchem_base:latest
-             ghcr.io/${{ env.REPO_OWNER }}/mlchem_base:oss
-             ghcr.io/${{ env.REPO_OWNER }}/mlchem_base:oss-${{ env.DATE }}
+             ghcr.io/${{ env.REPO_OWNER }}/mlchem_base:oss-${{ env.DATE }}-ubuntu${{ env.UBUNTU_VERSION }}
           build-args: |
             ROOT_IMAGE=docker.io/ubuntu:${{ env.UBUNTU_VERSION }}
             PYTHON_VERSION=${{ env.BASE_PY_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
-        if: matrix.variant == 'oss'
 
-      - name: Build with foundation image -- nvhpc
-        uses: docker/build-push-action@v5
-        with:
-          context: docker-stacks/images/docker-stacks-foundation
-          push: true
-          tags: |
-             ghcr.io/${{ env.REPO_OWNER }}/mlchem_base:nvhpc
-             ghcr.io/${{ env.REPO_OWNER }}/mlchem_base:nvhpc-${{ env.DATE }}
-             ghcr.io/${{ env.REPO_OWNER }}/mlchem_base:nvhpc-${{ env.NVHPC_VERSION }}-cuda${{ env.MAJOR_CUDA_VERSION }}-py${{ env.BASE_PY_VERSION }}
-          build-args: |
-            ROOT_IMAGE=nvcr.io/nvidia/nvhpc:${{ env.NVHPC_VERSION }}-runtime-cuda${{ env.MAJOR_CUDA_VERSION }}-ubuntu${{ env.UBUNTU_VERSION }}
-            PYTHON_VERSION=${{ env.BASE_PY_VERSION }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64
-        if: matrix.variant == 'nvhpc'
-      - name: Check disk space
-        run: |
-          df -h
+      # - name: Build with foundation image -- nvhpc
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: docker-stacks/images/docker-stacks-foundation
+      #     push: true
+      #     tags: |
+      #        ghcr.io/${{ env.REPO_OWNER }}/mlchem_base:nvhpc
+      #        ghcr.io/${{ env.REPO_OWNER }}/mlchem_base:nvhpc-${{ env.DATE }}
+      #        ghcr.io/${{ env.REPO_OWNER }}/mlchem_base:nvhpc-${{ env.NVHPC_VERSION }}-cuda${{ env.MAJOR_CUDA_VERSION }}-py${{ env.BASE_PY_VERSION }}
+      #     build-args: |
+      #       ROOT_IMAGE=nvcr.io/nvidia/nvhpc:${{ env.NVHPC_VERSION }}-runtime-cuda${{ env.MAJOR_CUDA_VERSION }}-ubuntu${{ env.UBUNTU_VERSION }}
+      #       PYTHON_VERSION=${{ env.BASE_PY_VERSION }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+      #     platforms: linux/amd64,linux/arm64
+      #   if: matrix.variant == 'nvhpc'
+      # - name: Check disk space
+      #   run: |
+      #     df -h
         
   # base-notebook-image:
   #   needs: foundation-image
