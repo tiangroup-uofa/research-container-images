@@ -2,13 +2,13 @@
 # We will not use the whole cuda toolkit, but rather
 # uv pip install the cu11.8 
 ARG BASE_IMAGE="ghcr.io/alchem0x2a/mlchem_worker:latest"
-ARG CUDA_VERSION="cu118"
-ARG PYTORCH_VERSION="2.7"
+
 
 FROM ${BASE_IMAGE}
 
 LABEL maintainer="T.Tian <alchem0x2a@gmail.com>"
-
+ARG CUDA_VERSION="cu118"
+ARG PYTORCH_VERSION="2.7"
 USER "$NB_UID"
 WORKDIR "$HOME"
 
