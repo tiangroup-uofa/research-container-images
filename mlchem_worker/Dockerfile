@@ -22,9 +22,15 @@ RUN mamba install --yes -c conda-forge \
     fix-permissions "/home/${NB_USER}" 
 
 # parsl and GCE are currently better installed by uv/pip
-RUN UV_PYTHON=/opt/conda/bin/python \
+RUN mamba install --yes -c conda-forge \
+    compilers &&\
+    UV_PYTHON=/opt/conda/bin/python \
     uv pip install --no-cache-dir \
     "parsl[aws,globus_compute]" \
     "globus-compute-endpoint" \
     "rclone-python" &&\
-    uv cache clean && rm -rf ${HOME}/.cache/uv
+    uv cache clean && rm -rf ${HOME}/.cache/uv &&\
+    mamba remove --prefix /opt/conda -y compilers &&\
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
