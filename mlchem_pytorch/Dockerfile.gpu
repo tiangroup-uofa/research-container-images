@@ -27,7 +27,10 @@ RUN mamba install \
     -c pytorch -c conda-forge \
     "pytorch=${PYTORCH_VERSION}=*cuda*" \
     "cudatoolkit==${CUDA_VERSION}" &&\
-    mamba clean --all -f -y
+    mamba clean --all -f -y &&\
+    # Pin the pytorch version
+    echo "pytorch ${PYTORCH_VERSION}=*cuda*" >> "${CONDA_DIR}"/conda-meta/pinned &&\
+    echo "cudatoolkit ${CUDA_VERSION}" >> "${CONDA_DIR}"/conda-meta/pinned"
 
     
 
