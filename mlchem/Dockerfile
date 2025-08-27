@@ -16,9 +16,11 @@ RUN mamba install --yes -c conda-forge\
     "matplotlib" "tqdm" "wandb" "spglib" "openbabel" \
     "gpaw" "gpaw-data" \
     "openmm" \
-    "mace-torch" \
     "sparc-x-api" \
     "phonopy" &&\
     mamba clean --all -f -y
 
-# Compile SPARC version
+RUN UV_PYTHON=/opt/conda/bin/python \
+    uv pip install --no-cache-dir \
+    "mace-torch" &&\
+    uv cache clean && rm -rf ${HOME}/.cache/uv
