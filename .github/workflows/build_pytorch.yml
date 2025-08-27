@@ -62,26 +62,28 @@ jobs:
       - name: Combine Dockerfile
         run: |
           cd ./mlchem_pytorch/
-          cat Dockerfile.part.cuda >> Dockerfile
-        if: matrix.variant == 'cuda'
-      - name: Set cuda version for wheel download
-        run: |
-          if [ "${{ matrix.variant }}" = "cpu" ]; then
-            echo "CLEAN_CUDA_VERSION=cpu" >> $GITHUB_ENV
-          else
-            CLEAN=$(echo "${{ env.MAJOR_CUDA_VERSION }}" | tr -d '.')
-            echo "CLEAN_CUDA_VERSION=cu${CLEAN}" >> $GITHUB_ENV
-          fi
-          echo "Will download from wheels ${{ env.CLEAN_CUDA_VERSION }}"
+          cat Dockerfile.${{ matrix.variant }} >> Dockerfile
+      # - name: Set cuda version for wheel download
+      #   run: |
+          #
+          # if [ "${{ matrix.variant }}" = "cpu" ]; then
+          #   #echo "CLEAN_CUDA_VERSION=cpu" >> $GITHUB_ENV
+            
+          # else
+          #   #CLEAN=$(echo "${{ env.MAJOR_CUDA_VERSION }}" | tr -d '.')
+          #   #echo "CLEAN_CUDA_VERSION=cu${CLEAN}" >> $GITHUB_ENV
+          # fi
+          # echo "Will download from wheels ${{ env.CLEAN_CUDA_VERSION }}"
       - name: Build with foundation image -- cuda
         uses: docker/build-push-action@v5
         with:
           context: ./mlchem_pytorch/
           push: true
           tags: |
-             ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:latest
+             ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:cuda
+             ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:${{ env.CLEAN_CUDA_VERSION }}-${{ env.DATE }}
           build-args: |
-             CUDA_VERSION=${{ env.CLEAN_CUDA_VERSION }}
+             CUDA_VERSION=${{ env.MAJOR_CUDA_VERSION }}
              PYTORCH_VERSION=${{ env.PYTORCH_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -94,9 +96,10 @@ jobs:
           context: ./mlchem_pytorch/
           push: true
           tags: |
-             ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:latest
+             ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:cpu
+             ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:${{ env.CLEAN_CUDA_VERSION }}-${{ env.DATE }}
           build-args: |
-             CUDA_VERSION=${{ env.CLEAN_CUDA_VERSION }}
+             CUDA_VERSION=${{ env.MAJOR_CUDA_VERSION }}
              PYTORCH_VERSION=${{ env.PYTORCH_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

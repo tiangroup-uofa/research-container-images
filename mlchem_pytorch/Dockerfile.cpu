@@ -19,12 +19,9 @@ ARG PYTORCH_VERSION
 USER "$NB_UID"
 WORKDIR "$HOME"
 
-# versions with cpu / gpu
-RUN UV_PYTHON=/opt/conda/bin/python \
-    uv pip install --no-cache-dir \
-    --extra-index-url=https://pypi.nvidia.com \
-    --index-url "https://download.pytorch.org/whl/${CUDA_VERSION}" \
-    "torch==${PYTORCH_VERSION}" &&\
-    uv cache clean && rm -rf ${HOME}/.cache/uv
+RUN mamba install \
+    -c pytorch -c conda-forge \
+    "pytorch=${PYTORCH_VERSION}=*${CUDA_VERSION}*" &&\
+    mamba clean --all -f -y
 
 

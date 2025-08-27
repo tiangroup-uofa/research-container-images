@@ -1,0 +1,40 @@
+# Adding pytorch as one layer to the image
+# Do not use mamba to install pytorch toolchain!
+ARG BASE_IMAGE="ghcr.io/alchem0x2a/mlchem_worker:latest"
+ARG CUDA_VERSION="cu118"
+ARG PYTORCH_VERSION="2.7"
+
+
+FROM ${BASE_IMAGE}
+
+LABEL maintainer="T.Tian <alchem0x2a@gmail.com>"
+# The ARG statements should be inherited below LABEL
+ARG CUDA_VERSION
+ARG PYTORCH_VERSION
+
+USER "$NB_UID"
+WORKDIR "$HOME"
+
+# Choose versions with cpu / gpu
+# uv does not work well with specified --index-url
+# but rather through internal argument
+# RUN UV_PYTHON=/opt/conda/bin/python \
+#     uv pip install --no-cache-dir \
+#     --torch-backend="${CUDA_VERSION}" \
+#     "torch==${PYTORCH_VERSION}" &&\
+#     uv cache clean && rm -rf ${HOME}/.cache/uv
+RUN mamba install \
+    -c pytorch -c conda-forge \
+    "pytorch=${PYTORCH_VERSION}=*cuda*" \
+    "cudatoolkit==${CUDA_VERSION}" &&\
+    mamba clean --all -f -y
+
+    
+
+
+
+# https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/docker-specialized.html#dockerfiles
+ENV NVIDIA_VISIBLE_DEVICES="all" \
+    NVIDIA_DRIVER_CAPABILITIES="compute,utility" \
+    PATH="${PATH:+${PATH}:}/usr/local/nvidia/bin" \
+    LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}/usr/local/nvidia/lib64"
