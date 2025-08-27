@@ -63,17 +63,6 @@ jobs:
         run: |
           cd ./mlchem_pytorch/
           cat Dockerfile.${{ matrix.variant }} >> Dockerfile
-      # - name: Set cuda version for wheel download
-      #   run: |
-          #
-          # if [ "${{ matrix.variant }}" = "cpu" ]; then
-          #   #echo "CLEAN_CUDA_VERSION=cpu" >> $GITHUB_ENV
-            
-          # else
-          #   #CLEAN=$(echo "${{ env.MAJOR_CUDA_VERSION }}" | tr -d '.')
-          #   #echo "CLEAN_CUDA_VERSION=cu${CLEAN}" >> $GITHUB_ENV
-          # fi
-          # echo "Will download from wheels ${{ env.CLEAN_CUDA_VERSION }}"
       - name: Build with foundation image -- cuda
         uses: docker/build-push-action@v5
         with:
