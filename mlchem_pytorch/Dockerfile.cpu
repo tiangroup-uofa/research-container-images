@@ -1,7 +1,6 @@
 # Adding pytorch as one layer to the image
 # Do not use mamba to install pytorch toolchain!
 ARG BASE_IMAGE="ghcr.io/alchem0x2a/mlchem_worker:latest"
-ARG CUDA_VERSION="cpu"
 ARG PYTORCH_VERSION="2.7"
 
 # amd64: cpu / gpu co-exist
@@ -13,7 +12,6 @@ FROM ${BASE_IMAGE}
 
 LABEL maintainer="T.Tian <alchem0x2a@gmail.com>"
 # The ARG statements should be inherited below LABEL
-ARG CUDA_VERSION
 ARG PYTORCH_VERSION
 
 USER "$NB_UID"
@@ -21,7 +19,7 @@ WORKDIR "$HOME"
 
 RUN mamba install \
     -c pytorch -c conda-forge \
-    "pytorch=${PYTORCH_VERSION}=*${CUDA_VERSION}*" &&\
+    "pytorch=${PYTORCH_VERSION}=*cpu*" &&\
     mamba clean --all -f -y &&\
     # Pin the pytorch version
     echo "pytorch ${PYTORCH_VERSION}=*cpu*" >> "${CONDA_DIR}"/conda-meta/pinned
