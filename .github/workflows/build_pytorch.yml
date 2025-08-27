@@ -70,7 +70,7 @@ jobs:
           push: true
           tags: |
              ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:cuda
-             ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:${{ env.MAJOR_CUDA_VERSION }}-${{ env.DATE }}
+             ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:${{ env.MAJOR_CUDA_VERSION }}-cuda${{ env.MAJOR_CUDA_VERSION }}-${{ env.DATE }}
           build-args: |
              CUDA_VERSION=${{ env.MAJOR_CUDA_VERSION }}
              PYTORCH_VERSION=${{ env.PYTORCH_VERSION }}
@@ -85,8 +85,9 @@ jobs:
           context: ./mlchem_pytorch/
           push: true
           tags: |
+             ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:latest
              ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:cpu
-             ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:${{ env.MAJOR_CUDA_VERSION }}-${{ env.DATE }}
+             ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch:${{ env.MAJOR_CUDA_VERSION }}-cpu-${{ env.DATE }}
           build-args: |
              CUDA_VERSION=${{ env.MAJOR_CUDA_VERSION }}
              PYTORCH_VERSION=${{ env.PYTORCH_VERSION }}

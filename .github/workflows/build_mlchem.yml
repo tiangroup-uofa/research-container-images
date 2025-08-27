@@ -1,4 +1,4 @@
-name: Build the ML chem stack
+name: Build the ML chem main stack
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
       matrix:
         variant:
           - cuda
-          - nvhpc
+          - cpu
     steps:
       - name: Maximize build space
         run: |
@@ -62,42 +62,41 @@ jobs:
           tags: |
             ghcr.io/${{ env.REPO_OWNER }}/mlchem:cuda
             ghcr.io/${{ env.REPO_OWNER }}/mlchem:cuda-${{ env.DATE }}
-            ghcr.io/${{ env.REPO_OWNER }}/mlchem:latest
-            docker.io/${{ env.REPO_OWNER }}/mlchem:cuda
-            docker.io/${{ env.REPO_OWNER }}/mlchem:cuda-${{ env.DATE }}
-            docker.io/${{ env.REPO_OWNER }}/mlchem:latest
           build-args: |
-            BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER }}/base-notebook:cuda
+            BASE_IMAGE=ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch
+            VARIANT=cuda
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
         if: matrix.variant == 'cuda'
-
-      - name: Build base notebook image -- nvhpc
+        
+      - name: Build base notebook image -- cpu
         uses: docker/build-push-action@v5
         with:
           context: mlchem/
           push: true
           tags: |
-            ghcr.io/${{ env.REPO_OWNER }}/mlchem:nvhpc
-            ghcr.io/${{ env.REPO_OWNER }}/mlchem:nvhpc-${{ env.DATE }}
-            docker.io/${{ env.REPO_OWNER }}/mlchem:nvhpc
-            docker.io/${{ env.REPO_OWNER }}/mlchem:nvhpc-${{ env.DATE }}
+            ghcr.io/${{ env.REPO_OWNER }}/mlchem:latest
+            ghcr.io/${{ env.REPO_OWNER }}/mlchem:cpu
+            ghcr.io/${{ env.REPO_OWNER }}/mlchem:cpu-${{ env.DATE }}
           build-args: |
-            BASE_CONTAINER=ghcr.io/${{ env.REPO_OWNER }}/base-notebook:nvhpc
+            BASE_IMAGE=ghcr.io/${{ env.REPO_OWNER }}/mlchem_pytorch
+            VARIANT=cpu
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
-        if: matrix.variant == 'nvhpc'
+        if: matrix.variant == 'cpu'
 
-  trigger-downstream:
-    needs: ml-chem
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Rebuild downstream images
-        run: |
-          gh workflow run build_mlchem_proprietary.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  # trigger-downstream:
+  #   needs: ml-chem
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Rebuild downstream images
+  #       run: |
+  #         gh workflow run build_mlchem_proprietary.yml
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
