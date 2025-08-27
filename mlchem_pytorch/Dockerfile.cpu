@@ -3,10 +3,6 @@
 ARG BASE_IMAGE="ghcr.io/alchem0x2a/mlchem_worker:latest"
 ARG PYTORCH_VERSION="2.7"
 
-# amd64: cpu / gpu co-exist
-# aarch64: cpu only
-# what about build matrix?
-
 
 FROM ${BASE_IMAGE}
 
@@ -17,11 +13,11 @@ ARG PYTORCH_VERSION
 USER "$NB_UID"
 WORKDIR "$HOME"
 
-RUN mamba install \
-    -c pytorch -c conda-forge \
-    "pytorch=${PYTORCH_VERSION}=*cpu*" &&\
-    mamba clean --all -f -y &&\
-    # Pin the pytorch version
-    echo "pytorch ${PYTORCH_VERSION}=*cpu*" >> "${CONDA_DIR}"/conda-meta/pinned
+RUN CLEAN_CUDA_VERSION=cu${CUDA_VERSION//./}
+    UV_PYTHON=/opt/conda/bin/python \
+    uv pip install --no-cache-dir \
+    --torch-backend="auto" \
+    "torch==${PYTORCH_VERSION}" &&\
+    uv cache clean && rm -rf ${HOME}/.cache/uv
 
 
