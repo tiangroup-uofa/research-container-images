@@ -13,8 +13,7 @@ ARG PYTORCH_VERSION
 USER "$NB_UID"
 WORKDIR "$HOME"
 
-RUN CLEAN_CUDA_VERSION=cu${CUDA_VERSION//./}
-    UV_PYTHON=/opt/conda/bin/python \
+RUN UV_PYTHON=/opt/conda/bin/python \
     uv pip install --no-cache-dir \
     --torch-backend="auto" \
     "torch==${PYTORCH_VERSION}" &&\
