@@ -13,7 +13,7 @@ on:
 
 
 jobs:
-  ml-chem:
+  build-image:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -90,7 +90,7 @@ jobs:
 
 
   # trigger-downstream:
-  #   needs: ml-chem
+  #   needs: build-image
   #   runs-on: ubuntu-latest
   #   steps:
   #     - name: Checkout

@@ -12,7 +12,7 @@ on:
 
 
 jobs:
-  foundation-image:
+  build-image:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -80,7 +80,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
 
   trigger-downstream:
-    needs: foundation-image
+    needs: build-image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

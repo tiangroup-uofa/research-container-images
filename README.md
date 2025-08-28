@@ -13,12 +13,12 @@ flowchart TB
     A --> B
     B --> C
     C --> D
-    D --> E
+    %%D --> E
 
     %% Arrange layers
     %%{rank=same; A; B}
     %%{rank=same; C; D}
 
-    classDef layer1 fill=#f9f,stroke=#333,stroke-width=1px
-    classDef layer2 fill=#bbf,stroke=#333,stroke-width=1px
+    %%classDef layer1 fill=#f9f,stroke=#333,stroke-width=1px
+    %%classDef layer2 fill=#bbf,stroke=#333,stroke-width=1px
 ```

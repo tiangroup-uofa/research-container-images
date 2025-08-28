@@ -12,7 +12,7 @@ on:
 
 
 jobs:
-  worker-image:
+  build-image:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -65,3 +65,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
+  trigger-downstream:
+    needs: build-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Rebuild downstream images
+        run: |
+          gh workflow run build_pytorch.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
