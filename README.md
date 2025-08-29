@@ -9,7 +9,34 @@ the group.
 > [!NOTE]  
 > Public images are hosted on the GitHub Container Registry [ghcr.io](ghcr.io).
 
-## Basic Usage
+## Quick start
+
+> [!TIP]
+> These commands assume you are using `podman` as the container engine. Replace `podman` to `docker` if needed.
+
+- Run a `jupyter` server on your personal PC
+```bash
+podman run -d -p 8888:8888 ghcr.io/tiangroup-uofa/mlchem:latest
+```
+
+- Run a command inside the container environment, with volume mapping
+```bash
+podman run -v <host_path>:<container_path> ghcr.io/tiangroup-uofa/mlchem:latest <command> [/path/inside/container]
+```
+
+- Run a command using `apptainer` on Digital Alliance HPC clusters
+```bash
+module load apptainer
+# You need to build the image to a local .sif file before running
+apptainer build <path-to-local-image>.sif docker://ghcr.io/tiangroup-uofa/mlchem:latest
+apptainer run <path-to-local-image>.sif <command> <path>
+```
+
+For more details please check with the [Advanced Topics]() section.
+
+## Image specifications
+
+
 ### Engine selection
 To use any of the images in this repository, you will need a container engine (a tool that can run containerized environments).
 A variety of engines are available depending on your setup:
@@ -89,7 +116,7 @@ Change the `<your-username>`, image name, and display name as needed.
 > [!IMPORTANT]  
 > The setting `-u 0:0` changes the uid:gid that runs the
 `ipykernel_launcher` *inside* the container to root:root.  
-> In `podman` namespace, it is equivalent to have the same uid:gid on the host file system to avoid [permission issues](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/troubleshooting.html#permission-denied-when-mounting-volumes). It is equivalent to the `docker` `-u uid:gid`
+> In `podman` namespace, it is equivalent to have the same uid:gid on the host file system to avoid [permission issues](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/troubleshooting.html#permission-denied-when-mounting-volumes). It is equivalent to the `docker` `-u uid:gid`.
 
 
 
