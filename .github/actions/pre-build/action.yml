@@ -20,6 +20,7 @@ runs:
         sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
         sudo docker image prune --all --force
         df -h
+      shell: bash
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
     - name: setup docker buildx
@@ -35,10 +36,12 @@ runs:
         echo "REPO_OWNER=${OWNER,,}" >>${GITHUB_ENV}
       env:
         OWNER: '${{ github.repository_owner }}'
+      shell: bash
     - name: Get Current Date
       id: date
       run: |
         echo "DATE=$(date +'%Y-%m-%d')" >>${GITHUB_ENV}
+      shell: bash
     - name: Inject env variables
       uses: falti/dotenv-action@v1.0.4
       with:
