@@ -14,6 +14,7 @@ on:
 
 jobs:
   base-image:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -49,6 +50,7 @@ jobs:
 
   worker-image:
     needs: base-image
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -70,6 +72,7 @@ jobs:
 
   pytorch-image-cpu:
     needs: worker-image
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
