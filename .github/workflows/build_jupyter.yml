@@ -8,6 +8,7 @@ on:
     paths:
       - 'jupyter/**'
       - '.github/workflows/build_jupyter.yml'
+      - '.github/actions'
   workflow_dispatch:
 
 
