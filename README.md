@@ -7,7 +7,7 @@ users, computational environments and architectures within and beyond
 the group. 
 
 > [!NOTE]  
-> Public images are hosted on the GitHub Container Registry ([ghcr.io]).
+> Public images are hosted on the GitHub Container Registry [ghcr.io](ghcr.io).
 
 ## Basic Usage
 ### Engine selection
@@ -26,6 +26,9 @@ Consult your system admin about the container usage and security
 policy. Most of the examples in this README will be based on personal
 PC usage via `podman` or `docker` commands.
 
+> [!NOTE]  
+> The `podman` command from the examples in this repository is interchangeable with `docker`
+
 ### Pull the image
 All available container images can be found in [the packages page](https://github.com/orgs/tiangroup-uofa/packages?repo_name=research-container-images), which use the following naming convention:
 ```bash
@@ -37,9 +40,18 @@ The `<image-name>` part may look like `mlchem_pytorch` and `<tag>` may accept
 choose an image suitable for the current CPU architecture
 (amd64/arm64) automatically.
 
-> [!NOTE]  
+> [!IMPORTANT]  
+> Unlike many examples from docker documentation, the `ghcr.io` prefix
+> cannot be omitted when pulling an image.
+
+> [!IMPORTANT]  
 > If no `<tag>` is provided, it will default to `latest`. In most
 > images it assumes the image with only CPU support.
+
+### Run a jupyter server from the container
+The `mlchem` series of images have built-in `jupyter` server scripts (as
+default command). Without providing 
+
 
 
 
