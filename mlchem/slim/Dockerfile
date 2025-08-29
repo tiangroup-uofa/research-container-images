@@ -1,6 +1,6 @@
 # Slim mlchem image that does not depend on torch
 # and only include minimal ase / pymatgen libraries
-ARG BASE_IMAGE="ghcr.io/alchem0x2a/jupyter_worker:latest"
+ARG BASE_IMAGE="ghcr.io/tiangroup-uofa/jupyter_worker:latest"
 FROM ${BASE_IMAGE}:${VARIANT}
 
 LABEL maintainer="T.Tian <alchem0x2a@gmail.com>"

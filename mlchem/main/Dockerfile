@@ -1,7 +1,7 @@
 # Main image for mlchem applications
 # most desired packages should be present
 # and the user are welcome to add more
-ARG BASE_IMAGE="ghcr.io/alchem0x2a/mlchem_pytorch"
+ARG BASE_IMAGE="ghcr.io/tiangroup-uofa/jupyter_pytorch"
 ARG VARIANT="cpu"
 FROM ${BASE_IMAGE}:${VARIANT}
 

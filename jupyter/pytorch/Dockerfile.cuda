@@ -1,6 +1,6 @@
 # Adding pytorch as one layer to the image
 # Do not use mamba to install pytorch toolchain!
-ARG BASE_IMAGE="ghcr.io/alchem0x2a/mlchem_worker:latest"
+ARG BASE_IMAGE="ghcr.io/tiangroup-uofa/jupyter_worker:latest"
 ARG CUDA_VERSION="11.8"
 ARG PYTORCH_VERSION="2.7"
 

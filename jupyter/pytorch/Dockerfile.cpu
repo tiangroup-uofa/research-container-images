@@ -1,6 +1,6 @@
 # Adding pytorch as one layer to the image
 # Do not use mamba to install pytorch toolchain!
-ARG BASE_IMAGE="ghcr.io/alchem0x2a/mlchem_worker:latest"
+ARG BASE_IMAGE="ghcr.io/tiangroup-uofa/jupyter_worker:latest"
 ARG PYTORCH_VERSION="2.7"
 
 
@@ -18,3 +18,5 @@ RUN UV_PYTHON=/opt/conda/bin/python \
     --torch-backend="cpu" \
     "torch==${PYTORCH_VERSION}" &&\
     uv cache clean && rm -rf ${HOME}/.cache/uv
+
+

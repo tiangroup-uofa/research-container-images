@@ -1,7 +1,7 @@
 # Basic worker image for parallel computation
 # based on parsl + globus compute endpoint
 # we install numpy and scipy as most parsl components would depend
-ARG BASE_IMAGE="ghcr.io/alchem0x2a/mlchem_base:latest"
+ARG BASE_IMAGE="ghcr.io/tiangroup-uofa/mlchem_base:latest"
 FROM ${BASE_IMAGE}
 
 LABEL maintainer="T.Tian <alchem0x2a@gmail.com>"
@@ -19,7 +19,7 @@ RUN mamba install --yes -c conda-forge \
     'tqdm' &&\
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
+    fix-permissions "/home/${NB_USER}" 
 
 # parsl and GCE are currently better installed by uv/pip
 RUN mamba install --yes -c conda-forge \
