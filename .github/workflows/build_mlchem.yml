@@ -15,7 +15,7 @@ on:
 
 jobs:
   mlchem-slim:
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -34,9 +34,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
-          
+
   mlchem-cpu:
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -55,13 +55,13 @@ jobs:
             ghcr.io/${{ env.REPO_OWNER }}/mlchem:cpu-${{ env.DATE }}
           build-args: |
             BASE_IMAGE="ghcr.io//${{ env.REPO_OWNER }}/jupyter_pytorch"
-            ARG VARIANT="cpu"            
+            ARG VARIANT="cpu"
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
 
   mlchem-cuda:
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5

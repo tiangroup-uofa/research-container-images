@@ -18,5 +18,3 @@ RUN UV_PYTHON=/opt/conda/bin/python \
     --torch-backend="cpu" \
     "torch==${PYTORCH_VERSION}" &&\
     uv cache clean && rm -rf ${HOME}/.cache/uv
-
-
