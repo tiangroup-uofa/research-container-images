@@ -3,13 +3,10 @@
 This repository hosts container `Dockerfile`s for research-oriented
 workflows, scientific visualization and miscellaneous tasks, aiming to provide repeatable and portable environments for daily research.
 
-> [!NOTE]  
-> Public images are hosted on the GitHub Container Registry [ghcr.io](ghcr.io).
-
 ## Quick start
 
 > [!TIP]
-> Replace `podman` to `docker` as the container engine if needed.
+> Replace `podman` to `docker` as the container engine, if needed.
 
 - Run a `jupyter` server on your personal PC
 ```bash
@@ -79,15 +76,14 @@ flowchart TB
     C --> D
 ```
 
-
-
+## Advanced Topics
 
 ### Engine selection
 To use any of the images in this repository, you will need a container engine (a tool that can run containerized environments).
 A variety of engines are available depending on your setup:
 - On personal PC / workstation:
-  - [`Podman`](https://podman.io): our recommended engine for running container images due to enhanced safety. Available both as GUI desktop app and standalone engine.
-  - [`Docker`](https://docs.docker.com/manuals/): one of the most popular engines, but may pose security issue in some cases.
+  - [`Podman`](https://podman.io): our recommended engine for running container images due to the [rootless feature](https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md). Available both as GUI desktop app and standalone engine.
+  - [`Docker`](https://docs.docker.com/manuals/): one of the most popular engines, but may pose security issue in some cases (especially on HPC systems).
 - High-Performance Computing (HPC) clusters
   - [`Apptainer`](https://apptainer.org): formerly known as `Singularity`, runs container on a local file (`.sif` format). This is the container engine used on most Digital Alliance HPC clusters in Canada.
   - [`Shifter`](https://github.com/NERSC/shifter): container engine developed by National Energy Research Scientific Computing Center (NERSC).
@@ -101,23 +97,80 @@ PC usage via `podman` or `docker` commands.
 > [!NOTE]  
 > The `podman` command from the examples in this repository is interchangeable with `docker`
 
-### Pull the image
-All available container images can be found in [the packages page](https://github.com/orgs/tiangroup-uofa/packages?repo_name=research-container-images), which use the following naming convention:
-
-
-The `<image-name>` part may look like `mlchem_pytorch` and `<tag>` may accept
-`cpu`, `cuda` etc. The container engine (`podman` / `docker` etc) may
-choose an image suitable for the current CPU architecture
-(amd64/arm64) automatically.
-
-
 
 ### Example 1: Run a jupyter server from the container
-The `mlchem` series of images have built-in `jupyter` server scripts (as default command). As an example, on a personal PC, running
+The `jupyter` series and inherited images (e.g., `mlchem`) include a built-in Jupyter server as the default command. 
+
+On a personal PC, start a container with:
 ```bash
-podman run -p 8888:8888 -d ghcr.io/tiangroup-uofa/mlchem:latest
+$podman run -p 8888:8888 -d ghcr.io/tiangroup-uofa/mlchem:latest
+abcdefgh1234567890abcdefgh1234567890abcdefgh1234567890abcdefgh1
 ```
-will start a jupyter server daemon and accessible from `localhost:8888`. For more details please see the [jupyter-docker-stacks documentation](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/running.html).
+The long hash from the output (`abcdefgh...`) is the container ID we will use in subsequent commands.
+
+The `-p 8888:8888` flag forwards the container’s port 8888 to port 8888 on your host machine (i.e. the personal PC that `podman` runs on). To get the access URL for the server in the container, use `podman logs` to check the outputs from the container, as we started it using the daemon (`-d`) mode:
+```bash
+$podman logs <container ID>
+# Omit outputs .....
+    Or copy and paste one of these URLs:
+        http://localhost:8888/lab?token=abcdefgh
+        http://127.0.0.1:8888/lab?token=abcdefgh
+```
+
+On your host machine, access the jupyter server by
+`http://localhost:8888/lab?token=abcdefgh` as we have setup the
+port-forwarding. For more setup details please refer to the [jupyter-docker-stacks documentation](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/running.html).
+
+### Example 2: Run a jupyter server with volume mount
+
+Example 1 starts a jupyter server without persistent storage, so any
+notebooks or files created inside the container will be lost when the
+container is removed. To make the data persistent, you can use either a container volume storage, or mount a local directory into the container.
+
+- Method 1: create a `podman` volume storage
+```bash
+# Create a named volume
+podman volume create jupyter_data
+
+# Run container with the volume
+podman run -p 8888:8888 -d \
+    -v jupyter_data:/home/jovyan/work \
+    ghcr.io/tiangroup-uofa/mlchem:latest
+```
+
+The named volume `jupyter_data` can be reattached to another jupyter container. You can also check its content without starting a container:
+```bash
+# 1. Enter the Podman namespace (gives root access)
+podman unshare
+
+# 2. Mount the named volume
+podman volume mount jupyter_data
+# The output shows the mounted location of the volume, such as:
+# /home/<your-username>/.local/share/containers/storage/volumes/jupyter_data/_data
+
+# 3. Perform data inspection or modification, remember to preserve file permissions
+
+# 4. When done, exit the namespace
+exit
+```
+
+- Method 2: mount a local host directory (bind-mount):
+```bash
+podman run -p 8888:8888 -d \
+    -v /path/to/local/folder:/home/jovyan/work \
+    ghcr.io/tiangroup-uofa/mlchem:latest
+```
+
+Which mounts `/path/to/local/folder` on your host machine to
+`/home/jovyan/work` inside the container. 
+
+> [!TIP]
+> Use `podman unshare` to modify permission of directory on the host
+
+> [!WARNING]
+> If you encounter file permission issues when using the bind-mount method, please check the [discussion in jupyter-docker-stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/troubleshooting.html#permission-denied-when-mounting-volumes) and understand [how user id are managed in podman](https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md).
+
+
 
 ### Example 2: use the container as jupyter kernel
 One may also take advantage of multi-kernel jupyter installation, to start a notebook from a container kernel. All `mlchem` images have `ipykernel` installed to faciliate this:
