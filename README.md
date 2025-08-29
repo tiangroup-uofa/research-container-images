@@ -48,10 +48,57 @@ choose an image suitable for the current CPU architecture
 > If no `<tag>` is provided, it will default to `latest`. In most
 > images it assumes the image with only CPU support.
 
-### Run a jupyter server from the container
-The `mlchem` series of images have built-in `jupyter` server scripts (as
-default command). Without providing 
+### Example 1: Run a jupyter server from the container
+The `mlchem` series of images have built-in `jupyter` server scripts (as default command). As an example, on a personal PC, running
+```bash
+podman run -p 8888:8888 -d ghcr.io/tiangroup-uofa/mlchem:latest
+```
+will start a jupyter server daemon and accessible from `localhost:8888`. For more details please see the [jupyter-docker-stacks documentation](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/running.html).
 
+### Example 2: use the container as jupyter kernel
+One may also take advantage of multi-kernel jupyter installation, to start a notebook from a container kernel. All `mlchem` images have `ipykernel` installed to faciliate this:
+```bash
+# Replace mlchem --> your kernel dir name
+mkdir -p ~/.local/share/jupyter/kernels/mlchem_base/
+touch ~/.local/share/jupyter/kernels/mlchem_base/kernel.json
+```
+
+Edit the `kernel.json` file with following content:
+```json
+ "argv": [
+  "podman", "run",
+  "-v",
+  "/home/<your-username>:/home/<your-username>",
+  "-u", "0:0",
+  "--network=host", "--entrypoint=",
+  "ghcr.io/tiangroup-uofa/mlchem:latest",
+  "/opt/conda/bin/python",
+  "-Xfrozen_modules=off", 
+  "-m", "ipykernel_launcher",
+  "-f", "{connection_file}"
+ ],
+ "display_name": "mlchem container kernel",
+ "language": "python",
+ "metadata": {
+  "debugger": true
+ }
+}
+```
+
+Change the `<your-username>`, image name, and display name as needed.
+> [!IMPORTANT]  
+> The setting `-u 0:0` changes the uid:gid that runs the
+`ipykernel_launcher` *inside* the container to root:root.  
+> In `podman` namespace, it is equivalent to have the same uid:gid on the host file system to avoid [permission issues](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/troubleshooting.html#permission-denied-when-mounting-volumes). It is equivalent to the `docker` `-u uid:gid`
+
+
+
+### Run a shell command in the container
+The container offers an isolated environment from the host machine to
+run a command:
+```bash
+podman run ghcr.io/tiangroup-uofa/mlchem:latest
+```
 
 
 
