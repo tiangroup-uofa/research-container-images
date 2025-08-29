@@ -172,8 +172,10 @@ Which mounts `/path/to/local/folder` on your host machine to
 
 
 
-### Example 2: use the container as jupyter kernel
-One may also take advantage of multi-kernel jupyter installation, to start a notebook from a container kernel. All `mlchem` images have `ipykernel` installed to faciliate this:
+### Example 3: use the container as jupyter kernel
+If your host already has an active Jupyter server, the `jupyter` and `mlchem` series containers can be used as kernel backends. This avoids opening extra ports while still leveraging the container environment.
+
+First create a kernel specification json file:
 ```bash
 # Replace mlchem --> your kernel dir name
 mkdir -p ~/.local/share/jupyter/kernels/mlchem_base/
@@ -203,27 +205,42 @@ Edit the `kernel.json` file with following content:
 ```
 
 Change the `<your-username>`, image name, and display name as needed.
-> [!IMPORTANT]  
-> The setting `-u 0:0` changes the uid:gid that runs the
-`ipykernel_launcher` *inside* the container to root:root.  
-> In `podman` namespace, it is equivalent to have the same uid:gid on the host file system to avoid [permission issues](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/troubleshooting.html#permission-denied-when-mounting-volumes). It is equivalent to the `docker` `-u uid:gid`.
+
+> [!TIP]
+> The kernel service method is useful when the host machine is behind a proxy and is only reachable by certain ports or host name.
+
+> [!NOTE]  
+> The `-u 0:0` flag grants the `ipykernel_launcher` access to files under `/home/<your-username>` *inside the container* to allow connections to be made.
 
 
 
-### Run a shell command in the container
-The container offers an isolated environment from the host machine to
-run a command:
+### Example 4. run a container-wrapped command on HPC
+HPC systems usually have strict file permission rules, so docker is typically unavailable. Digital Alliance HPCs use `apptainer` as the
+container engine, which can be seen as the HPC-equivalent of `podman` on a personal PC. Please refer to the [Alliance Wiki](https://docs.alliancecan.ca/wiki/Apptainer) for more details.
+
+First download the container image and build a .sif file
 ```bash
-podman run ghcr.io/tiangroup-uofa/mlchem:latest
+module load apptainer
+apptainer build /path/to/project/mlchem_latest.sif docker://ghcr.io/tiangroup-uofa/mlchem:latest
 ```
 
+> [!TIP]
+> The container images are usually several GiBs in size, so store the sif files under the `~/project` dir
+
+Apptainer by default mounts the user home `$HOME` to the same directory in the container, so you can easily run any script from there
+```bash
+apptainer run /path/to/project/mlchem_latest.sif python /path/to/script.py
+```
+
+- The `python` binary is the containerized version (`/opt/conda/bin/python`)
+- `/path/to/script.py` is the same on the host and inside container
+
+> [!TIP]
+> **DO NOT** include any `module load` commands in the script, as they won't be available.
 
 
-
-Supported Architectures • amd64 • arm64
-
-All mlchem images are built on Ubuntu 22.04 and extend the Jupyter Docker Stacks.
-
-⸻
-
-Available Images
+If you run into any problems, try the following flags to `apptainer run`:
+- `-C`: Fully isolate the container from the host file system and environmental variables
+- `-e`: Selectively preserve environment variables inside the container
+- `-B`: Bind-mount directories to the container (in addition to `-C` or `-c` flags)
+- `-W`: Specify the new workdir (i.e. switch back to `/home/jovyan`)
