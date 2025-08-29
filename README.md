@@ -184,6 +184,7 @@ touch ~/.local/share/jupyter/kernels/mlchem_base/kernel.json
 
 Edit the `kernel.json` file with following content:
 ```json
+{
  "argv": [
   "podman", "run",
   "-v",
@@ -204,7 +205,7 @@ Edit the `kernel.json` file with following content:
 }
 ```
 
-Change the `<your-username>`, image name, and display name as needed.
+Change `<your-username>`, image name, and display name as needed.
 
 > [!TIP]
 > The kernel service method is useful when the host machine is behind a proxy and is only reachable by certain ports or host name.
@@ -244,3 +245,10 @@ If you run into any problems, try the following flags to `apptainer run`:
 - `-e`: Selectively preserve environment variables inside the container
 - `-B`: Bind-mount directories to the container (in addition to `-C` or `-c` flags)
 - `-W`: Specify the new workdir (i.e. switch back to `/home/jovyan`)
+
+## Building images
+
+The images are automatically built by the CI/CD system backed by
+github actions. All build workflows can be found under [.github/workflows](.github/workflows)
+
+
