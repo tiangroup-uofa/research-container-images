@@ -1,7 +1,7 @@
 # Basic worker image for parallel computation
 # based on parsl + globus compute endpoint
 # we install numpy and scipy as most parsl components would depend
-ARG BASE_IMAGE="ghcr.io/tiangroup-uofa/mlchem_base:latest"
+ARG BASE_IMAGE="ghcr.io/tiangroup-uofa/jupyter_base:latest"
 FROM ${BASE_IMAGE}
 
 LABEL maintainer="T.Tian <alchem0x2a@gmail.com>"

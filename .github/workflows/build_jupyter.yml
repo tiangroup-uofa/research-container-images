@@ -123,14 +123,14 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64
 
-  # # trigger-downstream:
-  # #   needs: build-image
-  # #   runs-on: ubuntu-latest
-  # #   steps:
-  # #     - name: Checkout
-  # #       uses: actions/checkout@v5
-  # #     - name: Rebuild downstream images
-  # #       run: |
-  # #         gh workflow run build_worker.yml
-  # #       env:
-  # #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  trigger-downstream:
+    needs: [pytorch-image-cuda, pytorch-image-cpu]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Rebuild downstream images
+        run: |
+          gh workflow run build_mlchem.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
