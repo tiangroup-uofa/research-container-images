@@ -23,6 +23,7 @@ jobs:
         uses: actions/checkout@v5
       - name: Pre-build setup
         uses: ./.github/actions/pre-build
+        secrets: inherit
       - name: Download jupyter docker stack
         run: |
           curdir=$(pwd)
