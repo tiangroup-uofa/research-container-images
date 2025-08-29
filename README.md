@@ -1,10 +1,7 @@
 # Research Container Images Collection
 
 This repository hosts container `Dockerfile`s for research-oriented
-workflows, scientific visualization and miscellaneous tasks. The aim
-is to provide repeatable and portable environments, across different
-users, computational environments and architectures within and beyond
-the group. 
+workflows, scientific visualization and miscellaneous tasks, aiming to provide repeatable and portable environments for daily research.
 
 > [!NOTE]  
 > Public images are hosted on the GitHub Container Registry [ghcr.io](ghcr.io).
@@ -12,7 +9,7 @@ the group.
 ## Quick start
 
 > [!TIP]
-> These commands assume you are using `podman` as the container engine. Replace `podman` to `docker` if needed.
+> Replace `podman` to `docker` as the container engine if needed.
 
 - Run a `jupyter` server on your personal PC
 ```bash
@@ -29,12 +26,60 @@ podman run -v <host_path>:<container_path> ghcr.io/tiangroup-uofa/mlchem:latest 
 module load apptainer
 # You need to build the image to a local .sif file before running
 apptainer build <path-to-local-image>.sif docker://ghcr.io/tiangroup-uofa/mlchem:latest
-apptainer run <path-to-local-image>.sif <command> <path>
+apptainer run <path-to-local-image>.sif <command> [/path/on/HPC]
 ```
 
 For more details please check with the [Advanced Topics]() section.
 
 ## Image specifications
+
+### Naming Convention
+
+All images follow the naming pattern:
+```bash
+ghcr.io/tiangroup-uofa/<image-name>:<tag>
+```
+
+- `<image-name>` → describes the image’s purpose (e.g. `jupyter_pytorch`, `mlchem`).
+- `<tag>` → variant type. Images with accelerator support (e.g. PyTorch) provide both cpu and cuda tags when available.
+
+You can find all available image specs in [the packages page](https://github.com/orgs/tiangroup-uofa/packages?repo_name=research-container-images)
+
+> [!TIP]  
+> If no `<tag>` is specified, it defaults to `latest` (usually CPU-only).
+
+> [!TIP]  
+> Unlike DockerHub, the `ghcr.io` prefix must be included when pulling images.
+
+### Architectures
+- All images are built for both `amd64` and `arm64`, where possible. 
+- GPU-acceleration is currently only supported for `cuda` on `amd64` (i.e. no `cuda` on `arm64`).
+- Some computational packages may be `amd64`-only, or the `arm64` support is not extensively tested.
+
+### Image relationship
+```mermaid
+---
+config:
+  layout: elk
+  theme: redux
+  look: classic
+---
+flowchart TB
+ subgraph s1["jupyter images"]
+        A["jupyter_base"]
+        B["jupyter_worker"]
+        C["jupyter_pytorch"]
+  end
+ subgraph s2["mlchem images"]
+        D["mlchem"]
+        E["mlchem_slim"]
+  end
+    A --> B
+    B --> C & E
+    C --> D
+```
+
+
 
 
 ### Engine selection
@@ -58,22 +103,14 @@ PC usage via `podman` or `docker` commands.
 
 ### Pull the image
 All available container images can be found in [the packages page](https://github.com/orgs/tiangroup-uofa/packages?repo_name=research-container-images), which use the following naming convention:
-```bash
-ghcr.io/tiangroup-uofa/<image-name>:<tag>
-```
+
 
 The `<image-name>` part may look like `mlchem_pytorch` and `<tag>` may accept
 `cpu`, `cuda` etc. The container engine (`podman` / `docker` etc) may
 choose an image suitable for the current CPU architecture
 (amd64/arm64) automatically.
 
-> [!IMPORTANT]  
-> Unlike many examples from docker documentation, the `ghcr.io` prefix
-> cannot be omitted when pulling an image.
 
-> [!IMPORTANT]  
-> If no `<tag>` is provided, it will default to `latest`. In most
-> images it assumes the image with only CPU support.
 
 ### Example 1: Run a jupyter server from the container
 The `mlchem` series of images have built-in `jupyter` server scripts (as default command). As an example, on a personal PC, running
