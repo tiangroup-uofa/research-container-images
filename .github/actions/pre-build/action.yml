@@ -1,7 +1,10 @@
 name: Setup pre-build environment
 description: 
 
-inputs: {}
+inputs:
+  ghcr_secret: 
+    description: "GHCR secrets"
+    required: true
   # image:
   #   description: Image name
   #   required: true
@@ -30,7 +33,7 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ inputs.ghcr_secret }}
     - name: set lower case owner name
       run: |
         echo "REPO_OWNER=${OWNER,,}" >>${GITHUB_ENV}
