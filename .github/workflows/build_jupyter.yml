@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      
+
       - name: Checkout
         uses: actions/checkout@v5
       - name: Pre-build setup
@@ -35,7 +35,7 @@ jobs:
           cd $curdir/docker-stacks/images/docker-stacks-foundation/
           cp $curdir/base/* ./
           cat Dockerfile.part >> Dockerfile
-  
+
       - name: Build on top of foundation image
         uses: docker/build-push-action@v5
         with:
@@ -84,7 +84,7 @@ jobs:
   #         path: ./env
   #         export-variables: true
   #         keys-case: bypass
-          
+
   #     - name: Get Current Date
   #       id: date
   #       run: |
@@ -116,4 +116,3 @@ jobs:
   # #         gh workflow run build_worker.yml
   # #       env:
   # #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      

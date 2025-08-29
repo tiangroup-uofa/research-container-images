@@ -1,8 +1,8 @@
 name: Setup pre-build environment
-description: 
+description:
 
 inputs:
-  ghcr_secret: 
+  ghcr_secret:
     description: "GHCR secrets"
     required: true
   # image:

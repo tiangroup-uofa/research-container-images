@@ -42,14 +42,14 @@ ghcr.io/tiangroup-uofa/<image-name>:<tag>
 
 You can find all available image specs in [the packages page](https://github.com/orgs/tiangroup-uofa/packages?repo_name=research-container-images)
 
-> [!TIP]  
+> [!TIP]
 > If no `<tag>` is specified, it defaults to `latest` (usually CPU-only).
 
-> [!TIP]  
+> [!TIP]
 > Unlike DockerHub, the `ghcr.io` prefix must be included when pulling images.
 
 ### Architectures
-- All images are built for both `amd64` and `arm64`, where possible. 
+- All images are built for both `amd64` and `arm64`, where possible.
 - GPU-acceleration is currently only supported for `cuda` on `amd64` (i.e. no `cuda` on `arm64`).
 - Some computational packages may be `amd64`-only, or the `arm64` support is not extensively tested.
 
@@ -94,12 +94,12 @@ Consult your system admin about the container usage and security
 policy. Most of the examples in this README will be based on personal
 PC usage via `podman` or `docker` commands.
 
-> [!NOTE]  
+> [!NOTE]
 > The `podman` command from the examples in this repository is interchangeable with `docker`
 
 
 ### Example 1: Run a jupyter server from the container
-The `jupyter` series and inherited images (e.g., `mlchem`) include a built-in Jupyter server as the default command. 
+The `jupyter` series and inherited images (e.g., `mlchem`) include a built-in Jupyter server as the default command.
 
 On a personal PC, start a container with:
 ```bash
@@ -162,7 +162,7 @@ podman run -p 8888:8888 -d \
 ```
 
 Which mounts `/path/to/local/folder` on your host machine to
-`/home/jovyan/work` inside the container. 
+`/home/jovyan/work` inside the container.
 
 > [!TIP]
 > Use `podman unshare` to modify permission of directory on the host
@@ -193,7 +193,7 @@ Edit the `kernel.json` file with following content:
   "--network=host", "--entrypoint=",
   "ghcr.io/tiangroup-uofa/mlchem:latest",
   "/opt/conda/bin/python",
-  "-Xfrozen_modules=off", 
+  "-Xfrozen_modules=off",
   "-m", "ipykernel_launcher",
   "-f", "{connection_file}"
  ],
@@ -210,7 +210,7 @@ Change `<your-username>`, image name, and display name as needed.
 > [!TIP]
 > The kernel service method is useful when the host machine is behind a proxy and is only reachable by certain ports or host name.
 
-> [!NOTE]  
+> [!NOTE]
 > The `-u 0:0` flag grants the `ipykernel_launcher` access to files under `/home/<your-username>` *inside the container* to allow connections to be made.
 
 
@@ -250,5 +250,3 @@ If you run into any problems, try the following flags to `apptainer run`:
 
 The images are automatically built by the CI/CD system backed by
 github actions. All build workflows can be found under [.github/workflows](.github/workflows)
-
-

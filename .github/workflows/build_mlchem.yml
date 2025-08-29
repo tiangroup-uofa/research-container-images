@@ -64,7 +64,7 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64
         if: matrix.variant == 'cuda'
-        
+
       - name: Build base notebook image -- cpu
         uses: docker/build-push-action@v5
         with:

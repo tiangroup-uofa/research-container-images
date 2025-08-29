@@ -19,7 +19,7 @@ RUN mamba install --yes -c conda-forge \
     'tqdm' &&\
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}" 
+    fix-permissions "/home/${NB_USER}"
 
 # parsl and GCE are currently better installed by uv/pip
 RUN mamba install --yes -c conda-forge \

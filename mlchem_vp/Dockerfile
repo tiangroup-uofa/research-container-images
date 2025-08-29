@@ -37,4 +37,3 @@ RUN apt-get update &&\
 
 USER $NB_UID
 WORKDIR $HOME
-

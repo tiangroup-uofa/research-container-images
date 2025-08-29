@@ -50,7 +50,7 @@ jobs:
           path: ./env
           export-variables: true
           keys-case: bypass
-          
+
       - name: Get Current Date
         id: date
         run: |
@@ -96,7 +96,7 @@ jobs:
           # aarch64 do not have cuda variant
           platforms: linux/amd64,linux/arm64
         if: matrix.variant == 'cpu'
-      
+
 
   trigger-downstream:
     needs: build-image
@@ -109,4 +109,3 @@ jobs:
           gh workflow run build_mlchem.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      

@@ -45,7 +45,7 @@ jobs:
           path: ./env
           export-variables: true
           keys-case: bypass
-          
+
       - name: Get Current Date
         id: date
         run: |

@@ -18,6 +18,6 @@ echo WANDB_API_KEY=${WANDB_API_KEY} >> /etc/environment
 
 if $(command -v start-notebook.py >/dev/null)
 then
-    start-notebook.py --IdentityProvider.token=${JUPYTER_LAB_TOKEN} & 
+    start-notebook.py --IdentityProvider.token=${JUPYTER_LAB_TOKEN} &
 fi
 unset JUPYTER_LAB_TOKEN
