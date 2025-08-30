@@ -54,8 +54,8 @@ jobs:
             ghcr.io/${{ env.REPO_OWNER }}/mlchem:cpu
             ghcr.io/${{ env.REPO_OWNER }}/mlchem:cpu-${{ env.DATE }}
           build-args: |
-            BASE_IMAGE="ghcr.io//${{ env.REPO_OWNER }}/jupyter_pytorch"
-            ARG VARIANT="cpu"
+            BASE_IMAGE=ghcr.io//${{ env.REPO_OWNER }}/jupyter_pytorch
+            ARG VARIANT=cpu
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
@@ -78,8 +78,8 @@ jobs:
             ghcr.io/${{ env.REPO_OWNER }}/mlchem:cuda
             ghcr.io/${{ env.REPO_OWNER }}/mlchem:cpu-${{ env.DATE }}
           build-args: |
-            BASE_IMAGE="ghcr.io//${{ env.REPO_OWNER }}/jupyter_pytorch"
-            ARG VARIANT="cuda"
+            BASE_IMAGE=ghcr.io//${{ env.REPO_OWNER }}/jupyter_pytorch
+            ARG VARIANT=cuda
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
