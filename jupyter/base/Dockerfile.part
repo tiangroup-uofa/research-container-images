@@ -10,7 +10,7 @@
 USER root
 RUN apt-get update &&\
     apt-get install -yq --no-install-recommends \
-    git curl bzip2 zip unzip rsync rclone nano \
+    git curl bzip2 zip unzip rsync rclone make nano \
     openssh-client parallel tmux run-one &&\
     # Install gh
     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg &&\
