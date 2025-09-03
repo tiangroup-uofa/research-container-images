@@ -11,7 +11,7 @@ USER $NB_UID
 WORKDIR $HOME
 
 # Compile SPARC as a local conda tarball
-RUN git clone https://github.com/tiangroup-uofa/SPARC.git &&\
+RUN git clone --depth 1 https://github.com/tiangroup-uofa/SPARC.git &&\
     mamba install --yes -c conda-forge pip setuptools "conda-build=24.9.0" "colorama=0.4.6"  "ruamel=1.0" ruamel.yaml "rich=13.9" "mamba=1.5.10" "jsonschema=4.23" &&\
     pip install git+https://github.com/mamba-org/boa.git@00a11ffce59f47c0fc576f93d39baf1f8fc92f32 &&\
     cd SPARC &&\
@@ -20,7 +20,7 @@ RUN git clone https://github.com/tiangroup-uofa/SPARC.git &&\
 
 # Compile gpaw as a local wheel (no cleanup needed)
 # as gpaw 24.6 from conda-forge still relies on numpy 1.26
-COPY gpaw /tmp
+COPY gpaw/siteconfig.py /tmp/gpaw/siteconfig.py
 RUN mamba install --yes -c conda-forge \
     compilers \
     openblas openmpi=4.* \
