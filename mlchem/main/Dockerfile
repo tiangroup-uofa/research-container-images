@@ -5,7 +5,7 @@ ARG BASE_IMAGE="ghcr.io/tiangroup-uofa/jupyter_pytorch"
 ARG VARIANT="cpu"
 
 # Computational packages requiring compilation
-FROM ${BASE_IMAGE}:${VARIANT} as build
+FROM ${BASE_IMAGE}:${VARIANT} AS build
 USER $NB_UID
 
 WORKDIR $HOME
@@ -14,7 +14,7 @@ RUN git clone https://github.com/alchem0x2a/SPARC.git &&\
     mamba install --yes -c conda-forge pip setuptools "conda-build=24.9.0" "colorama=0.4.6"  "ruamel=1.0" ruamel.yaml "rich=13.9" "mamba=1.5.10" "jsonschema=4.23" &&\
     pip install git+https://github.com/mamba-org/boa.git@00a11ffce59f47c0fc576f93d39baf1f8fc92f32 &&\
     cd SPARC &&\
-    CPU_COUNT=<ncores> conda mambabuild .conda/
+    CPU_COUNT=<ncores> conda mambabuild .conda/ &&\
     mamba install --yes -c conda-forge \
     mamba clean --all -f -y
 
