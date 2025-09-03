@@ -14,6 +14,7 @@ RUN git clone https://github.com/alchem0x2a/SPARC.git &&\
     mamba install --yes -c conda-forge pip setuptools "conda-build=24.9.0" "colorama=0.4.6"  "ruamel=1.0" ruamel.yaml "rich=13.9" "mamba=1.5.10" "jsonschema=4.23" &&\
     pip install git+https://github.com/mamba-org/boa.git@00a11ffce59f47c0fc576f93d39baf1f8fc92f32 &&\
     cd SPARC &&\
+    sed -i 's/DEBUG_MODE=1/DEBUG_MODE=0/' .conda/build.sh &&\
     conda mambabuild .conda/ &&\
     mamba clean --all -f -y
 
@@ -32,15 +33,16 @@ RUN mamba install --yes -c conda-forge \
     "matplotlib" "tqdm" "wandb" "spglib" "openbabel" \
     "openmm" \
     "sparc-x-api" \
-    "phonopy" &&\
+    "phonopy" \
+    # SPARC runtime dependencies (openmpi 4)
+    "openmpi=4.*" \
+    "libopenblas" \
+    "scalapack" \
+    "fftw=*=mpi_openmpi_*" &&\
     # Local sparc-x version
     mamba install --yes /tmp/sparc-*.tar.bz2 &&\
     rm -rf /tmp/sparc-*.tar.bz2 &&\
     mamba clean --all -f -y
-
-# # Computational packages that requires compilation
-# RUN  &&\
-#     mamba install --yes -c conda-forge \
 
     
 
