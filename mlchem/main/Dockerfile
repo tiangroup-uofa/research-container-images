@@ -29,17 +29,25 @@ USER $NB_UID
 WORKDIR $HOME
 
 RUN mamba install --yes -c conda-forge \
-    "pymatgen>=2024" "ase>=3.25" "xtb" "xtb-python" \
-    "matplotlib" "tqdm" "wandb" "spglib" "openbabel" \
-    "openmm" \
-    "sparc-x-api" \
+    # Atomistic modeling / conversion packages
+    "pymatgen>=2024" \
+    "ase>=3.25"  \
+    "openbabel" \
     "phonopy" \
-    # SPARC runtime dependencies (openmpi 4)
+    # Quantum chemistry packages
+    "xtb" "xtb-python" \
+    "sparc-x-api" \
+    # MD packages
+    "openmm" \
+    # Helper packages
+    "wandb" \
+    "tqdm" \
+    # SPARC / GPAW runtime dependencies (openmpi 4)
     "openmpi=4.*" \
     "libopenblas" \
     "scalapack" \
     "fftw=*=mpi_openmpi_*" &&\
-    # Local sparc-x version
+    # Install local sparc-x version
     mamba install --yes /tmp/sparc-*.tar.bz2 &&\
     rm -rf /tmp/sparc-*.tar.bz2 &&\
     mamba clean --all -f -y
