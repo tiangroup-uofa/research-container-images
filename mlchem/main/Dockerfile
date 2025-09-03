@@ -15,13 +15,13 @@ RUN git clone https://github.com/alchem0x2a/SPARC.git &&\
     pip install git+https://github.com/mamba-org/boa.git@00a11ffce59f47c0fc576f93d39baf1f8fc92f32 &&\
     cd SPARC &&\
     CPU_COUNT=<ncores> conda mambabuild .conda/ &&\
-    mamba install --yes -c conda-forge \
     mamba clean --all -f -y
 
 FROM ${BASE_IMAGE}:${VARIANT}
 
 LABEL maintainer="T.Tian <alchem0x2a@gmail.com>"
 
+COPY --from=build /opt/conda/conda-bld/*/sparc-*.tar.bz2 /tmp/
 
 USER $NB_UID
 
@@ -33,6 +33,9 @@ RUN mamba install --yes -c conda-forge \
     "openmm" \
     "sparc-x-api" \
     "phonopy" &&\
+    # Local sparc-x version
+    mamba install --yes /tmp/sparc-*.tar.bz2 &&\
+    rm -rf /tmp/sparc-*.tar.bz2 &&\
     mamba clean --all -f -y
 
 # # Computational packages that requires compilation
