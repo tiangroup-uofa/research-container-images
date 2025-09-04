@@ -17,10 +17,9 @@ RUN mamba install --yes -c conda-forge \
     'requests' \
     'scipy'  \
     'tqdm' &&\
-    mamba clean --all -f -y && \
-    pip check &&\  # Try best effort to avoid broken pip packages
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
+    mamba clean --all -f -y &&\
+    # Try best effort to avoid broken pip packages
+    pip check
 
 # parsl and GCE are currently better installed by uv/pip
 RUN mamba install --yes -c conda-forge \
@@ -30,9 +29,15 @@ RUN mamba install --yes -c conda-forge \
     "parsl[aws,globus_compute]" \
     "globus-compute-endpoint" \
     "rclone-python" &&\
-    pip check &&\ # Try best effort to avoid broken pip packages
+    # Try best effort to avoid broken pip packages
+    pip check &&\ 
     uv cache clean && rm -rf ${HOME}/.cache/uv &&\
     mamba remove --prefix /opt/conda -y compilers &&\
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
+    mamba clean --all -f -y
+
+# Make matplotlib rc file
+COPY --chown=${NB_UID}:${NB_GID} ./matplotlibrc "${HOME}/.config/matplotlib/matplotlibrc"
+# USER root
+# RUN fix-permissions "$HOME/.config"
+
+# USER "$NB_UID"
