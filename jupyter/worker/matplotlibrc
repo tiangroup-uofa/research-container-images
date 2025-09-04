@@ -268,12 +268,12 @@ font.weight:  normal
 font.stretch: normal
 font.size:    10.0
 
-font.serif:      STIXGeneral, DejaVu Serif, Bitstream Vera Serif, Computer Modern Roman, New Century Schoolbook, Century Schoolbook L, Utopia, ITC Bookman, Bookman, Nimbus Roman No9 L, Times New Roman, Times, Palatino, Charter, serif
-# Make Arial or Helvetica higher priority when using sans-serif
-font.sans-serif: Helvetica, DejaVu Sans, Bitstream Vera Sans, Computer Modern Sans Serif, Lucida Grande, Verdana, Geneva, Lucid,  Avant Garde, sans-serif
-#font.cursive:    Apple Chancery, Textile, Zapf Chancery, Sand, Script MT, Felipa, Comic Neue, Comic Sans MS, cursive
+font.serif:   STIXGeneral, DejaVu Serif, Bitstream Vera Serif, Computer Modern Roman, New Century Schoolbook, Century Schoolbook L, Utopia, ITC Bookman, Bookman, Nimbus Roman No9 L, Times New Roman, Times, Palatino, Charter, serif
+# Make Fira Sans as default sans
+font.sans-serif: Fira Sans, DejaVu Sans, Bitstream Vera Sans, Computer Modern Sans Serif, Lucida Grande, Verdana, Geneva, Lucid,  Avant Garde, sans-serif
+font.cursive:    Felipa, Apple Chancery, Textile, Zapf Chancery, Sand, Script MT, Comic Neue, Comic Sans MS, cursive
 #font.fantasy:    Chicago, Charcoal, Impact, Western, xkcd script, fantasy
-font.monospace:  DejaVu Sans Mono, Bitstream Vera Sans Mono, Computer Modern Typewriter, Andale Mono, Nimbus Mono L, Courier New, Courier, Fixed, Terminal, monospace
+font.monospace:  Fira Code, DejaVu Sans Mono, Bitstream Vera Sans Mono, Computer Modern Typewriter, Andale Mono, Nimbus Mono L, Courier New, Courier, Fixed, Terminal, monospace
 
 
 ## ***************************************************************************
@@ -336,7 +336,7 @@ font.monospace:  DejaVu Sans Mono, Bitstream Vera Sans Mono, Computer Modern Typ
                         # loaded, depending on your font settings.
 
 ## The following settings allow you to select the fonts in math mode.
-mathtext.fontset: stixsans  # Should be 'dejavusans' (default),
+mathtext.fontset: custom  # Should be 'dejavusans' (default),
                                # 'dejavuserif', 'cm' (Computer Modern), 'stix',
                                # 'stixsans' or 'custom'
 ## "mathtext.fontset: custom" is defined by the mathtext.bf, .cal, .it, ...
@@ -344,7 +344,7 @@ mathtext.fontset: stixsans  # Should be 'dejavusans' (default),
 ## settings are not used for other font sets.)
 #mathtext.bf:  sans:bold
 #mathtext.bfit: sans:italic:bold
-#mathtext.cal: cursive
+mathtext.cal: cursive
 #mathtext.it:  sans:italic
 #mathtext.rm:  sans
 #mathtext.sf:  sans
@@ -353,7 +353,7 @@ mathtext.fallback: stixsans  # Select fallback font from ['cm' (Computer Modern)
                         # 'stixsans'] when a symbol cannot be found in one of the
                         # custom math fonts. Select 'None' to not perform fallback
                         # and replace the missing character by a dummy symbol.
-#mathtext.default: it  # The default font to use for math.
+mathtext.default: it  # The default font to use for math.
                        # Can be any of the LaTeX font names, including
                        # the special name "regular" for the same font
                        # used in regular text.
@@ -412,7 +412,7 @@ mathtext.fallback: stixsans  # Select fallback font from ['cm' (Computer Modern)
 #axes.spines.top:    True
 #axes.spines.right:  True
 
-#axes.unicode_minus: True  # use Unicode for the minus symbol rather than hyphen.  See
+axes.unicode_minus: True  # use Unicode for the minus symbol rather than hyphen.  See
                            # https://en.wikipedia.org/wiki/Plus_and_minus_signs#Character_codes
 #axes.prop_cycle: cycler('color', ['1f77b4', 'ff7f0e', '2ca02c', 'd62728', '9467bd', '8c564b', 'e377c2', '7f7f7f', 'bcbd22', '17becf'])
                   # color cycle for plot lines as list of string color specs:
@@ -695,10 +695,10 @@ figure.autolayout: True  # When True, automatically adjust subplot
 ## The default savefig parameters can be different from the display parameters
 ## e.g., you may want a higher resolution, or to make the figure
 ## background white
-#savefig.dpi:       figure      # figure dots per inch or 'figure'
+savefig.dpi:       300      # figure dots per inch or 'figure'
 #savefig.facecolor: auto        # figure face color when saving
 #savefig.edgecolor: auto        # figure edge color when saving
-#savefig.format:    png         # {png, ps, pdf, svg}
+savefig.format:    png         # {png, ps, pdf, svg}
 #savefig.bbox:      standard    # {tight, standard}
                                 # 'tight' is incompatible with generating frames
                                 # for animation
@@ -720,7 +720,7 @@ savefig.transparent: True     # whether figures are saved with a transparent
 
 ### ps backend params
 #ps.papersize:      letter  # {figure, letter, legal, ledger, A0-A10, B0-B10}
-ps.useafm:         True   # use AFM fonts, results in small files
+#ps.useafm:         True   # use AFM fonts, results in small files
 #ps.usedistiller:   False   # {ghostscript, xpdf, None}
                             # Experimental: may produce smaller files.
                             # xpdf intended for production of publication quality files,
@@ -731,8 +731,8 @@ ps.useafm:         True   # use AFM fonts, results in small files
 ### PDF backend params
 #pdf.compression:    6  # integer from 0 to 9
                         # 0 disables compression (good for debugging)
-#pdf.fonttype:       3  # Output Type 3 (Type3) or Type 42 (TrueType)
-pdf.use14corefonts: True
+pdf.fonttype:       42  # Output Type 3 (Type3) or Type 42 (TrueType)
+#pdf.use14corefonts: True
 #pdf.inheritcolor:   False
 
 ### SVG backend params
