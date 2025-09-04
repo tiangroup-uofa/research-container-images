@@ -31,18 +31,16 @@ RUN mamba install --yes -c conda-forge \
     pip wheel -w /tmp --no-deps gpaw==25.7
     
 
-
-
 FROM ${BASE_IMAGE}:${VARIANT}
 
 LABEL maintainer="T.Tian <alchem0x2a@gmail.com>"
 
-COPY --from=build /opt/conda/conda-bld/*/sparc-*.tar.bz2 /tmp/
-COPY --from=build /tmp/gpaw-*.whl /tmp/
-
 USER $NB_UID
 
 WORKDIR $HOME
+
+COPY --from=build /opt/conda/conda-bld/*/sparc-*.tar.bz2 /tmp/
+COPY --from=build /tmp/gpaw-*.whl /tmp/
 
 RUN mamba install --yes -c conda-forge \
     # Atomistic modeling / conversion packages
@@ -57,18 +55,24 @@ RUN mamba install --yes -c conda-forge \
     "openmm" \
     # Helper packages
     "wandb" \
-    "tqdm" \
+    # globus-compute-endpoint requests a special version of click
+    # so try best to pin
+    "click<8.2.0" \
+     "tqdm" \
     # SPARC / GPAW runtime dependencies (openmpi 4)
     "openmpi=4.*" \
     "libopenblas" \
     "scalapack" \
     "fftw=*=mpi_openmpi_*" \
     "libxc" \
-    "libvdwxc=*=mpi_openmpi_*" &&\
+    "libvdwxc=*=mpi_openmpi_*" \
+    "gpaw-data"  &&\
     # Install local sparc-x version
     mamba install --yes /tmp/sparc-*.tar.bz2 &&\
     pip install --no-deps /tmp/gpaw-*.whl &&\
     rm -rf /tmp/* &&\
+    # Try best effort to avoid broken pip packages
+    pip check &&\
     mamba clean --all -f -y
 
     
@@ -76,4 +80,6 @@ RUN mamba install --yes -c conda-forge \
 RUN UV_PYTHON=/opt/conda/bin/python \
     uv pip install --no-cache-dir \
     "mace-torch" &&\
+    # Try best effort to avoid broken pip packages
+    pip check &&\
     uv cache clean && rm -rf ${HOME}/.cache/uv

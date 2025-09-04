@@ -18,6 +18,7 @@ RUN mamba install --yes -c conda-forge \
     'scipy'  \
     'tqdm' &&\
     mamba clean --all -f -y && \
+    pip check &&\  # Try best effort to avoid broken pip packages
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
@@ -29,6 +30,7 @@ RUN mamba install --yes -c conda-forge \
     "parsl[aws,globus_compute]" \
     "globus-compute-endpoint" \
     "rclone-python" &&\
+    pip check &&\ # Try best effort to avoid broken pip packages
     uv cache clean && rm -rf ${HOME}/.cache/uv &&\
     mamba remove --prefix /opt/conda -y compilers &&\
     mamba clean --all -f -y && \
