@@ -70,10 +70,12 @@ flowchart TB
  subgraph s2["mlchem images"]
         D["mlchem"]
         E["mlchem_slim"]
+        F["mlchem_vp"]
   end
     A --> B
     B --> C & E
     C --> D
+    D --> F
 ```
 
 ## Advanced Topics
