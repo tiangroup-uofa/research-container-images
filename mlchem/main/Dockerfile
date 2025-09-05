@@ -29,7 +29,7 @@ RUN mamba install --yes -c conda-forge \
     scalapack &&\
     GPAW_CONFIG=/tmp/gpaw/siteconfig.py \
     pip wheel -w /tmp --no-deps gpaw==25.7
-    
+
 
 FROM ${BASE_IMAGE}:${VARIANT}
 
@@ -75,7 +75,7 @@ RUN mamba install --yes -c conda-forge \
     pip check &&\
     mamba clean --all -f -y
 
-    
+
 
 RUN UV_PYTHON=/opt/conda/bin/python \
     uv pip install --no-cache-dir \

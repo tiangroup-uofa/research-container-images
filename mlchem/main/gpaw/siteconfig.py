@@ -38,50 +38,49 @@ To append use the form
 # MPI:
 mpi = True
 if mpi:
-    compiler = 'mpicc'
+    compiler = "mpicc"
 
 # FFTW3
 fftw = True
 if fftw:
-    libraries += ['fftw3']
+    libraries += ["fftw3"]
 
 # ScaLAPACK (version 2.0.1+ required):
 scalapack = True
 if scalapack:
-    libraries += ['scalapack']
+    libraries += ["scalapack"]
 
 # Elpa not used
 if 0:
     elpa = True
-    elpadir = '/home/user/elpa'
-    libraries += ['elpa']
-    library_dirs += ['{}/lib'.format(elpadir)]
-    runtime_library_dirs += ['{}/lib'.format(elpadir)]
-    include_dirs += ['{}/include/elpa-xxxx.xx.xxx'.format(elpadir)]
+    elpadir = "/home/user/elpa"
+    libraries += ["elpa"]
+    library_dirs += ["{}/lib".format(elpadir)]
+    runtime_library_dirs += ["{}/lib".format(elpadir)]
+    include_dirs += ["{}/include/elpa-xxxx.xx.xxx".format(elpadir)]
 
 
 # - libxc dynamic linking (requires rpath or setting LD_LIBRARY_PATH at runtime):
 if 1:
-    if 'xc' not in libraries:
-        libraries.append('xc')
+    if "xc" not in libraries:
+        libraries.append("xc")
 
 
 # libvdwxc:
 if 1:
     libvdwxc = True
-    libraries += ['vdwxc']
+    libraries += ["vdwxc"]
 
 # blas + lapack (conda-forge managed openblas)
 if 1:
-    libraries += ['blas', 'lapack']
+    libraries += ["blas", "lapack"]
 
 # Extra flags
-extra_compile_args += ['-fopenmp', '-fopenmp-simd']
-extra_link_args += ['-fopenmp', '-fopenmp-simd']
+extra_compile_args += ["-fopenmp", "-fopenmp-simd"]
+extra_link_args += ["-fopenmp", "-fopenmp-simd"]
 
 # Extra macros
-define_macros += [("GPAW_ASYNC", '1')]
-define_macros += [("GPAW_MPI2", '1')]
-define_macros += [('GPAW_NO_UNDERSCORE_CSCALAPACK', '1')]
-define_macros += [('GPAW_NO_UNDERSCORE_CBLACS', '1')]
-
+define_macros += [("GPAW_ASYNC", "1")]
+define_macros += [("GPAW_MPI2", "1")]
+define_macros += [("GPAW_NO_UNDERSCORE_CSCALAPACK", "1")]
+define_macros += [("GPAW_NO_UNDERSCORE_CBLACS", "1")]

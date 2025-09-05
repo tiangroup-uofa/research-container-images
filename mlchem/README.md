@@ -1,9 +1,9 @@
 # `mlchem` series images
 
-The `mlchem_*` series images are intended to be used as the main working images for daily basis. 
+The `mlchem_*` series images are intended to be used as the main working images for daily basis.
 
 ## Available images
-- [`mlchem_slim`](./slim): only add ase / pymatgen / openbabel 
+- [`mlchem_slim`](./slim): only add ase / pymatgen / openbabel
 - [`mlchem`](./main): the main `mlchem` image containing the ase / pymatgen toolchain, ML force fields, and open source DFT / MD engines.
 - [`mlchem_vp`](./proprietary): `mlchem` image with side-loadable proprietary DFT components (currently supporting VASP)
 
