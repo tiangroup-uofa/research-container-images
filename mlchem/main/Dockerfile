@@ -10,10 +10,13 @@ USER $NB_UID
 
 WORKDIR $HOME
 
+# Install the mambabuild toolchain (in build stage only)
+RUN mamba install --yes -c conda-forge pip setuptools "conda-build=24.9.0" "colorama=0.4.6"  "ruamel=1.0" ruamel.yaml "rich=13.9" "mamba=1.5.10" "jsonschema=4.23" &&\
+    pip install git+https://github.com/mamba-org/boa.git@00a11ffce59f47c0fc576f93d39baf1f8fc92f32
+
 # Compile SPARC as a local conda tarball
+# We'll use the group fork of SPARC
 RUN git clone --depth 1 https://github.com/tiangroup-uofa/SPARC.git &&\
-    mamba install --yes -c conda-forge pip setuptools "conda-build=24.9.0" "colorama=0.4.6"  "ruamel=1.0" ruamel.yaml "rich=13.9" "mamba=1.5.10" "jsonschema=4.23" &&\
-    pip install git+https://github.com/mamba-org/boa.git@00a11ffce59f47c0fc576f93d39baf1f8fc92f32 &&\
     cd SPARC &&\
     sed -i 's/DEBUG_MODE=1/DEBUG_MODE=0/' .conda/build.sh &&\
     conda mambabuild .conda/
@@ -65,11 +68,10 @@ RUN mamba install --yes -c conda-forge \
     "scalapack" \
     "fftw=*=mpi_openmpi_*" \
     "libxc" \
-    "libvdwxc=*=mpi_openmpi_*" \
-    "gpaw-data"  &&\
+    "libvdwxc=*=mpi_openmpi_*" &&\
     # Install local sparc-x version
     mamba install --yes /tmp/sparc-*.tar.bz2 &&\
-    pip install --no-deps /tmp/gpaw-*.whl &&\
+    pip install --no-cache-dir --no-deps /tmp/gpaw-*.whl gpaw-data &&\
     rm -rf /tmp/* &&\
     # Try best effort to avoid broken pip packages
     pip check &&\

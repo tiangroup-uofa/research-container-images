@@ -53,8 +53,3 @@ RUN mkdir -p "${HOME}/.fonts" && \
                assert \"Fira Sans\" in fnames; \
                assert \"Fira Code\" in fnames; \
                assert \"Felipa\" in fnames"
-
-# USER root
-# RUN fix-permissions "$HOME/.config"
-
-# USER "$NB_UID"

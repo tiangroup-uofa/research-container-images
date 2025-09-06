@@ -10,8 +10,11 @@ USER $NB_UID
 WORKDIR $HOME
 
 RUN mamba install --yes -c conda-forge\
-    "pymatgen>=2024" "ase>=3.25" \
-    "matplotlib" "tqdm" "openbabel" &&\
+    "pymatgen>=2024" \
+    "ase>=3.25" \
+    # To make globus-compute-endpoint compatible
+    "click<8.2.0" \
+    "openbabel" &&\
     # Try best effort to avoid broken pip packages
     pip check &&\
     mamba clean --all -f -y
