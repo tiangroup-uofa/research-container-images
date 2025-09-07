@@ -1,0 +1,8 @@
+make
+build-essential
+g++
+gfortran
+libopenblas-dev
+libopenmpi-dev
+libscalapack-openmpi-dev
+libfftw3-dev
