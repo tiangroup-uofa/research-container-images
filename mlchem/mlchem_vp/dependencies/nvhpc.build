@@ -1,4 +1,5 @@
 make
 rsync
+libatomic1
 build-essential
 libfftw3-dev
