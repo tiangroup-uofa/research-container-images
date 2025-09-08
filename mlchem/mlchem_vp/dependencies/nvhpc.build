@@ -1,3 +1,4 @@
 make
+rsync
 build-essential
 libfftw3-dev

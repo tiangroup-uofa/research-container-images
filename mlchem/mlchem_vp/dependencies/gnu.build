@@ -1,4 +1,5 @@
 make
+rsync
 build-essential
 g++
 gfortran
