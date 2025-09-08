@@ -29,7 +29,7 @@ RUN apt-get update &&\
     fix-permissions /opt/vasp
 
 # COPY relevant shared libs
-COPY --from=${DEVEL_IMAGE} ${NVHPC_VERSION}/compilers/extras/qd/lib ${NVHPC_VERSION}/compilers/extras/qd/lib
+COPY --from=${DEVEL_IMAGE} ${NVROOT}/compilers/extras/qd/lib ${NVROOT}/compilers/extras/qd/lib
 
 
 USER ${NB_UID}
