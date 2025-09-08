@@ -1,0 +1,35 @@
+# MLchem with runtime dependencies for proprietary
+# quantum chem codes (like VASP)
+# The image only adds the runtime dependencies
+# We will copy the runtime libraries from nvhpc runtime
+
+ARG BASE_IMAGE="ghcr.io/tiangroup-uofa/mlchem"
+ARG VARIANT="cuda" # Does not make sense to use the normal
+ARG NVHPC_VERSION="24.1"
+ARG CUDA_VERSION="11.8"
+ARG UBUNTU_VERSION="22.04"
+
+
+FROM ${BASE_IMAGE}:${VARIANT}
+ARG NVHPC_VERSION
+ARG CUDA_VERSION
+ARG DEVEL_IMAGE="nvcr.io/nvidia/nvhpc:${NVHPC_VERSION}-devel-cuda_multi-ubuntu${UBUNTU_VERSION}"
+ARG RUNTIME_IMAGE="nvcr.io/nvidia/nvhpc:${NVHPC_VERSION}-runtime-cuda${CUDA_VERSION}-ubuntu${UBUNTU_VERSION}"
+ARG NVROOT="/opt/nvidia/hpc_sdk/Linux_x86_64/${NVHPC_VERSION}"
+
+USER root
+COPY ./dependencies/nvhpc.runtime /tmp/nvhpc.runtime
+RUN apt-get update &&\
+    xargs -a /tmp/nvhpc.runtime \
+    apt-get install -yq --no-install-recommends &&\
+    apt-get clean && rm -rf /var/lib/apt/lists/* &&\
+    # Create placeholder vasp dirs
+    mkdir -p /opt/vasp/cpu /opt/vasp/gpu /opt/vasp/vasp_pp &&\
+    fix-permissions /opt/vasp
+
+# COPY relevant shared libs
+COPY --from=${DEVEL_IMAGE} ${NVHPC_VERSION}/compilers/extras/qd/lib ${NVHPC_VERSION}/compilers/extras/qd/lib
+
+
+USER ${NB_UID}
+WORKDIR ${HOME}
