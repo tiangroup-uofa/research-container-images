@@ -7,7 +7,7 @@ on:
       - workflow
     paths:
       - 'jupyter/**'
-      - '.github/workflows/build_jupyter.yml'
+      - '.github/workflows/build_jupyter_nvhpc.yml'
       - '.github/actions'
   workflow_dispatch:
 
