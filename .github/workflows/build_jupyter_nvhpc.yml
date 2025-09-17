@@ -1,0 +1,143 @@
+name: Jupyter series image -- NVHPC runtime backend
+
+on:
+  push:
+    branches:
+      - master
+      - workflow
+    paths:
+      - 'jupyter/**'
+      - '.github/workflows/build_jupyter.yml'
+      - '.github/actions'
+  workflow_dispatch:
+
+
+jobs:
+  base-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Pre-build setup
+        uses: ./.github/actions/pre-build
+        with:
+          ghcr_secret: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download jupyter docker stack
+        run: |
+          curdir=$(pwd)
+          git clone --depth 1 https://github.com/jupyter/docker-stacks.git
+          cd docker-stacks
+          git fetch origin ${{ env.JUPYTER_COMMIT_HASH }}
+          git checkout ${{ env.JUPYTER_COMMIT_HASH }}
+          cd $curdir/docker-stacks/images/docker-stacks-foundation/
+          cp $curdir/jupyter/base/* ./
+          cat Dockerfile.part >> Dockerfile
+
+      - name: Build on top of foundation image
+        uses: docker/build-push-action@v5
+        with:
+          context: docker-stacks/images/docker-stacks-foundation
+          push: true
+          tags: |
+             ghcr.io/${{ env.REPO_OWNER }}/jupyter_base:nvhpc
+             ghcr.io/${{ env.REPO_OWNER }}/jupyter_base:nvhpc-${{ env.DATE }}-${{ env.NVHPC_VERSION }}-runtime-cuda${{ env.MAJOR_CUDA_VERSION }}-ubuntu${{ env.UBUNTU_VERSION }}
+          build-args: |
+            ROOT_IMAGE=nvcr.io/nvidia/nvhpc:${{ env.NVHPC_VERSION }}-runtime-cuda${{ env.MAJOR_CUDA_VERSION }}-ubuntu${{ env.UBUNTU_VERSION }}
+            PYTHON_VERSION=${{ env.BASE_PY_VERSION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+
+  worker-image:
+    needs: base-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Pre-build setup
+        uses: ./.github/actions/pre-build
+        with:
+          ghcr_secret: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./jupyter/worker
+          push: true
+          tags: |
+             ghcr.io/${{ env.REPO_OWNER }}/jupyter_worker:nvhpc
+             ghcr.io/${{ env.REPO_OWNER }}/jupyter_worker:nvhpc-${{ env.DATE }}-ubuntu${{ env.UBUNTU_VERSION }}
+          build-args: |
+            ROOT_IMAGE=ghcr.io/${{ env.REPO_OWNER }}/jupyter_base:nvhpc-${{ env.DATE }}-${{ env.NVHPC_VERSION }}-runtime-cuda${{ env.MAJOR_CUDA_VERSION }}-ubuntu${{ env.UBUNTU_VERSION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+          
+
+  # pytorch-image-cpu:
+  #   needs: worker-image
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v5
+  #     - name: Pre-build setup
+  #       uses: ./.github/actions/pre-build
+  #       with:
+  #         ghcr_secret: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Combine Dockerfile
+  #       run: |
+  #         cd ./jupyter/pytorch/
+  #         cat Dockerfile.cpu >> Dockerfile
+  #     - name: Build image
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: ./jupyter/pytorch
+  #         push: true
+  #         tags: |
+  #            ghcr.io/${{ env.REPO_OWNER }}/jupyter_pytorch:nvhpc
+  #            ghcr.io/${{ env.REPO_OWNER }}/jupyter_pytorch:cpu
+  #            ghcr.io/${{ env.REPO_OWNER }}/jupyter_pytorch:cpu-${{ env.DATE }}-ubuntu${{ env.UBUNTU_VERSION }}
+  #         cache-from: type=gha
+  #         cache-to: type=gha,mode=max
+  #         platforms: linux/amd64,linux/arm64
+
+  pytorch-image-cuda:
+    needs: worker-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Pre-build setup
+        uses: ./.github/actions/pre-build
+        with:
+          ghcr_secret: ${{ secrets.GITHUB_TOKEN }}
+      - name: Combine Dockerfile
+        run: |
+          cd ./jupyter/pytorch/
+          cat Dockerfile.cuda >> Dockerfile
+      - name: Build image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./jupyter/pytorch
+          push: true
+          tags: |
+             ghcr.io/${{ env.REPO_OWNER }}/jupyter_pytorch:nvhpc
+             ghcr.io/${{ env.REPO_OWNER }}/jupyter_pytorch:nvhpc${{ env.MAJOR_CUDA_VERSION }}-${{ env.DATE }}-ubuntu${{ env.UBUNTU_VERSION }}
+          cache-from: type=gha
+           build-args: |
+            ROOT_IMAGE=ghcr.io/${{ env.REPO_OWNER }}/jupyter_base:nvhpc-${{ env.DATE }}-${{ env.NVHPC_VERSION }}-runtime-cuda${{ env.MAJOR_CUDA_VERSION }}-ubuntu${{ env.UBUNTU_VERSION }}
+            CUDA_VERSION=${{ env.MAJOR_CUDA_VERSION }}
+            PYTORCH_VERSION=${{ env.PYTORCH_VERSION }}
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+
+  # trigger-downstream:
+  #   needs: [pytorch-image-cuda]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v5
+  #     - name: Rebuild downstream images
+  #       run: |
+  #         gh workflow run build_mlchem_nvhpc.yml
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

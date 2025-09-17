@@ -12,7 +12,3 @@ MAJOR_CUDA_VERSION='11.8'
 UBUNTU_VERSION='22.04'
 BASE_PY_VERSION='3.12'
 PYTORCH_VERSION='2.7'
-#PYG_VERSION='2.1'
-
-# nvcr.io/nvidia/nvhpc:24.11-devel-cuda_multi-ubuntu24.04
-# nvcr.io/nvidia/nvhpc:24.11-runtime-cuda11.8-ubuntu24.04
