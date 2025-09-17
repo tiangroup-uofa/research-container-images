@@ -123,7 +123,7 @@ jobs:
              ghcr.io/${{ env.REPO_OWNER }}/jupyter_pytorch:nvhpc
              ghcr.io/${{ env.REPO_OWNER }}/jupyter_pytorch:nvhpc${{ env.MAJOR_CUDA_VERSION }}-${{ env.DATE }}-ubuntu${{ env.UBUNTU_VERSION }}
           cache-from: type=gha
-           build-args: |
+          build-args: |
             ROOT_IMAGE=ghcr.io/${{ env.REPO_OWNER }}/jupyter_base:nvhpc-${{ env.DATE }}-${{ env.NVHPC_VERSION }}-runtime-cuda${{ env.MAJOR_CUDA_VERSION }}-ubuntu${{ env.UBUNTU_VERSION }}
             CUDA_VERSION=${{ env.MAJOR_CUDA_VERSION }}
             PYTORCH_VERSION=${{ env.PYTORCH_VERSION }}
