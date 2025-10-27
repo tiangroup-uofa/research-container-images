@@ -76,7 +76,7 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ env.REPO_OWNER }}/mlchem:cuda
-            ghcr.io/${{ env.REPO_OWNER }}/mlchem:cpu-${{ env.DATE }}
+            ghcr.io/${{ env.REPO_OWNER }}/mlchem:cuda-${{ env.DATE }}
           build-args: |
             BASE_IMAGE=ghcr.io/${{ env.REPO_OWNER }}/jupyter_pytorch
             ARG VARIANT=cuda
