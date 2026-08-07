@@ -81,7 +81,7 @@ RUN mamba install --yes -c conda-forge \
 
 RUN UV_PYTHON=/opt/conda/bin/python \
     uv pip install --no-cache-dir \
-    "mace-torch" &&\
+    "mace-torch" "torch-sim-atomistic" &&\
     # Try best effort to avoid broken pip packages
     pip check &&\
     uv cache clean && rm -rf ${HOME}/.cache/uv
