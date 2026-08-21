@@ -68,7 +68,8 @@ RUN mamba install --yes -c conda-forge \
     "scalapack" \
     "fftw=*=mpi_openmpi_*" \
     "libxc" \
-    "libvdwxc=*=mpi_openmpi_*" &&\
+    "libvdwxc=*=mpi_openmpi_*" 
+    "nvidia-pytriton" &&\
     # Install local sparc-x version
     mamba install --yes /tmp/sparc-*.tar.bz2 &&\
     pip install --no-cache-dir --no-deps /tmp/gpaw-*.whl gpaw-data &&\
