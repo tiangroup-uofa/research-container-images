@@ -10,16 +10,23 @@ USER $NB_UID
 
 WORKDIR $HOME
 
-# Install the mambabuild toolchain (in build stage only)
-RUN mamba install --yes -c conda-forge pip setuptools "conda-build=24.9.0" "colorama=0.4.6"  "ruamel=1.0" ruamel.yaml "rich=13.9" "mamba=1.5.10" "jsonschema=4.23" &&\
-    pip install git+https://github.com/mamba-org/boa.git@00a11ffce59f47c0fc576f93d39baf1f8fc92f32
+# Install the standard conda-build toolchain (in build stage only)
+RUN mamba install --yes -c conda-forge \
+    conda-build \
+    pip \
+    setuptools &&\
+    conda-build --version
 
-# Compile SPARC as a local conda tarball
+# Compile SPARC as a local conda package
 # We'll use the group fork of SPARC
 RUN git clone --depth 1 https://github.com/tiangroup-uofa/SPARC.git &&\
     cd SPARC &&\
     sed -i 's/DEBUG_MODE=1/DEBUG_MODE=0/' .conda/build.sh &&\
-    conda mambabuild .conda/
+    conda-build .conda/ &&\
+    mkdir -p /tmp/sparc-package &&\
+    sparc_package="$(find /opt/conda/conda-bld -maxdepth 2 -type f -name 'sparc-*' -print -quit)" &&\
+    test -n "$sparc_package" &&\
+    cp "$sparc_package" /tmp/sparc-package/
 
 # Compile gpaw as a local wheel (no cleanup needed)
 # as gpaw 24.6 from conda-forge still relies on numpy 1.26
@@ -43,9 +50,10 @@ USER $NB_UID
 
 WORKDIR $HOME
 
-COPY --from=build /opt/conda/conda-bld/*/sparc-*.tar.bz2 /tmp/
+COPY --from=build /tmp/sparc-package/ /tmp/sparc-package/
 COPY --from=build /tmp/gpaw-*.whl /tmp/
 
+USER root
 RUN mamba install --yes -c conda-forge \
     # Atomistic modeling / conversion packages
     "pymatgen>=2024" \
@@ -59,10 +67,7 @@ RUN mamba install --yes -c conda-forge \
     "openmm" \
     # Helper packages
     "wandb" \
-    # globus-compute-endpoint requests a special version of click
-    # so try best to pin
-    "click<8.2.0" \
-     "tqdm" \
+    "tqdm" \
     # SPARC / GPAW runtime dependencies (openmpi 4)
     "openmpi=4.*" \
     "libopenblas" \
@@ -71,13 +76,18 @@ RUN mamba install --yes -c conda-forge \
     "libxc" \
     "libvdwxc=*=mpi_openmpi_*" &&\
     # Install local sparc-x version
-    mamba install --yes /tmp/sparc-*.tar.bz2 &&\
-    pip install --no-cache-dir --no-deps /tmp/gpaw-*.whl gpaw-data &&\
+    mamba install --yes /tmp/sparc-package/sparc-* &&\
+    UV_PYTHON=/opt/conda/bin/python \
+    uv pip install --no-cache-dir --no-deps \
+    "click>=8.3.3,<8.4.0" /tmp/gpaw-*.whl gpaw-data &&\
     rm -rf /tmp/* &&\
     # Try best effort to avoid broken pip packages
     pip check &&\
-    mamba clean --all -f -y
+    mamba clean --all -f -y &&\
+    fix-permissions /opt/conda
 
+USER $NB_UID
+WORKDIR $HOME
 
 
 # PyTriton is published on PyPI, not conda-forge. torch-sim is currently
