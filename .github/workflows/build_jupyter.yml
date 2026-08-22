@@ -118,7 +118,10 @@ jobs:
           push: true
           tags: |
              ghcr.io/${{ env.REPO_OWNER }}/jupyter_pytorch:cuda
-             ghcr.io/${{ env.REPO_OWNER }}/jupyter_pytorch:cuda${{ env.MAJOR_CUDA_VERSION }}-${{ env.DATE }}-ubuntu${{ env.UBUNTU_VERSION }}
+             ghcr.io/${{ env.REPO_OWNER }}/jupyter_pytorch:cuda${{ env.PYTORCH_CUDA_VERSION }}-${{ env.DATE }}-ubuntu${{ env.UBUNTU_VERSION }}
+          build-args: |
+            CUDA_VERSION=${{ env.PYTORCH_CUDA_VERSION }}
+            PYTORCH_VERSION=${{ env.PYTORCH_CUDA_PYTORCH_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
