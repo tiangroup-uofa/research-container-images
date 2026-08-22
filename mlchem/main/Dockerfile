@@ -35,6 +35,7 @@ RUN mamba install --yes -c conda-forge \
 
 
 FROM ${BASE_IMAGE}:${VARIANT}
+ARG VARIANT
 
 LABEL maintainer="T.Tian <alchem0x2a@gmail.com>"
 
@@ -68,8 +69,7 @@ RUN mamba install --yes -c conda-forge \
     "scalapack" \
     "fftw=*=mpi_openmpi_*" \
     "libxc" \
-    "libvdwxc=*=mpi_openmpi_*" \
-    "nvidia-pytriton" &&\
+    "libvdwxc=*=mpi_openmpi_*" &&\
     # Install local sparc-x version
     mamba install --yes /tmp/sparc-*.tar.bz2 &&\
     pip install --no-cache-dir --no-deps /tmp/gpaw-*.whl gpaw-data &&\
@@ -80,9 +80,18 @@ RUN mamba install --yes -c conda-forge \
 
 
 
-RUN UV_PYTHON=/opt/conda/bin/python \
-    uv pip install --no-cache-dir \
-    "mace-torch" "torch-sim-atomistic" &&\
+# PyTriton is published on PyPI, not conda-forge. torch-sim is currently
+# available for the CUDA variant, but its dependency stack is not portable
+# to the CPU arm64 build.
+RUN export UV_PYTHON=/opt/conda/bin/python &&\
+    if [ "$VARIANT" = "cuda" ]; then \
+        uv pip install --no-cache-dir \
+            --torch-backend="cu126" \
+            "nvidia-pytriton" "mace-torch" "torch-sim-atomistic"; \
+    else \
+        uv pip install --no-cache-dir \
+            "nvidia-pytriton" "mace-torch"; \
+    fi &&\
     # Try best effort to avoid broken pip packages
     pip check &&\
     uv cache clean && rm -rf ${HOME}/.cache/uv

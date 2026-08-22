@@ -15,4 +15,4 @@ This series is composed of layered images, where each sub-image builds on the pr
 |-------------------|---------------|-------|------------|----------------------------|
 | `jupyter_base`    | None          | ✅    | ✅         |                            |
 | `jupyter_worker`  | None          | ✅    | ✅         |                            |
-| `jupyter_pytorch` | `cpu`, `cuda` | ✅    | `cpu` only | `pytorch==2.7` `cuda=11.8` |
+| `jupyter_pytorch` | `cpu`, `cuda` | ✅    | `cpu` only | `pytorch==2.7` (CPU), `pytorch==2.8` with `cuda=12.6` (CUDA) |
